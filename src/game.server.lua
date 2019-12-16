@@ -5,40 +5,20 @@
 -- @Source: https://github.com/Onset-minigames
 --
 
+--[[ Declaration of variables ]]--
 gameIsStart = false
+local CheckStartTimer = nil
+
 Teams = {
 	prisoner = {},
 	guardian = {}
 }
 
---
---
---
-function ResetGame()
-
-	Teams = {
-		prisoner = {},
-		guardian = {}
-	}
-
-	-- Doors
-	DeleteDoors()
-	CreateDoors()
-
-	-- Clear weapon
-	for _, playerId in pairs(GetAllPlayers()) do
-		SetPlayerWeapon(playerId, 1, 0, true, 1, true)
-		SetPlayerWeapon(playerId, 1, 0, true, 2, true)
-		SetPlayerWeapon(playerId, 1, 0, true, 3, true)
-	end
-
-	gameIsStart = false
-
-end
 
 --
+-- @brief Function we use to set the roles to the player
 --
---
+
 function SetRoles()
 
 	-- Prisoner
@@ -76,7 +56,7 @@ function SetRoles()
 end
 
 --
--- Spawn jail or administration
+-- @brief Spawn in jail or in administration
 --
 function StartPlayersLocation()
 
@@ -95,7 +75,7 @@ function StartPlayersLocation()
 				-- Give weapon (Random)
 				local luck = Random(1, 20)
 				if luck == 13 then
-					AddPlayerChat(playerId, "Regarde tu a trouver une arme sous le matelas !")
+					AddPlayerChat(playerId, "Regard, tu viens de trouver une arme sous le matelas !")
 					SetPlayerWeapon(playerId, 3, Random(5, 20), false, 2, false)
 				end
 
@@ -115,52 +95,56 @@ function StartPlayersLocation()
 end
 
 --
+-- @brief Beforce to start the game, we need enough players
 --
---
-local CheckStartTimer = nil
 function CheckStartGame()
 
-	CheckStartTimer = CreateTimer(function()
-		if GetPlayerCount() > 5 then
-			ResetGame()
-			StartGame()
-		end
-	end, 5000) -- 5s
+	if(gameIsStart == false) then
+		CheckStartTimer = CreateTimer(function()
+			if GetPlayerCount() > 5 then
+				StartGame()
+			end
+		end, 5000) -- 5s
+	end
 
 end
 
 --
---
+-- @brief Function that will start the round
 --
 function StartGame() 
 
-	DestroyTimer(CheckStartTimer)
+	--DestroyTimer(CheckEndTimer)
+	gameIsStart = true
 	SetRoles()
 	StartPlayersLocation()
-	CheckEndGame()
-	gameIsStart = true
 
-	AddPlayerChatAll('<span color="#eeeeeeaa">Que le jeux commence !</>')
+	-- Check if the round is finish
+	CheckEndGame()
+
+	AddPlayerChatAll('<span color="#eeeeeeaa">Que le jeu commence !</>')
 
 end
 
+
 --
---
+-- @brief Function that we use to check every 5 seconds if the game is finished
 --
 local CheckEndTimer = nil
 function CheckEndGame()
 	
 	CheckEndTimer = CreateTimer(function()
 		if #Teams.prisoner == 0 or #Teams.guardian == 0 then
-			AddPlayerChatAll('<span color="#eeeeeeaa">Fin du jeux, GG à tous !</>')
+			AddPlayerChatAll('<span color="#eeeeeeaa">Fin du jeu, GG à tous !</>')
 			EndGame()
 		end
 	end, 5000) -- 5s
 
 end
 
+
 --
---
+-- @brief Function that will end the game
 --
 function EndGame()
 
@@ -170,19 +154,49 @@ function EndGame()
 	for _, playerId in pairs(GetAllPlayers()) do
 		if not IsPlayerDead(playerId) then
 			SetPlayerHealth(playerId, 0)
+			-- 10secondes
+			SetPlayerRespawnTime(playerId, 10000)
 		end
 
-		Delay(10000, function()			
-			SetPlayerRespawnTime(playerId, 10000)
-			CheckStartGame()
-		end)
+		--Delay(10000, function()			
+		--	SetPlayerRespawnTime(playerId, 10000)
+		--	CheckStartGame()
+		--end)
 	end
+
+	ResetGame()
 
 end
 
+
+function ResetGame()
+
+	Teams = {
+		prisoner = {},
+		guardian = {}
+	}
+
+	-- Doors
+	DeleteDoors()
+	CreateDoors()
+
+	-- Clear weapon
+	for _, playerId in pairs(GetAllPlayers()) do
+		SetPlayerWeapon(playerId, 1, 0, true, 1, true)
+		SetPlayerWeapon(playerId, 1, 0, true, 2, true)
+		SetPlayerWeapon(playerId, 1, 0, true, 3, true)
+	end
+
+	-- gameIsStart = false
+
+end
+
+
+
+
 AddCommand("start", function(playerId) 
 
-	ResetGame()
+	CheckStartGame()
 	StartGame()
 
 end)
