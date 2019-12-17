@@ -56,6 +56,20 @@ function ChangeClothing(playerId, playerClothing)
 
 end
 
+--
+--
+--
 AddRemoteEvent("ChangeClothing", function(playerId, playerClothing)
+
 	ChangeClothing(playerId, playerClothing)
+
+end)
+
+--
+--
+--
+AddEvent("OnPlayerSpawn", function()
+
+	CallRemoteEvent("SpawnClothing")
+
 end)

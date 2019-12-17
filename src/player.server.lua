@@ -91,17 +91,6 @@ AddEvent("OnPlayerJoin", function(playerId)
 
 end)
 
-
---
--- Spawn player
---
-AddEvent("OnPlayerSpawn", function(playerId)
-
-	ChangeClothing(playerId, "prisoner")
-	ChangeOtherPlayerClothes(playerId)
-	
-end)
-
 --
 --
 --

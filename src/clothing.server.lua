@@ -36,6 +36,16 @@ function ChangeOtherPlayerClothes(playerId)
 
 end
 
+--
+--
+--
+AddRemoteEvent("SpawnClothing", function(playerId)
+
+	ChangeClothing(playerId, "prisoner")
+	ChangeOtherPlayerClothes(playerId)
+
+end)
+
 -- TODO : REMOVE ME !
 AddCommand("r", function(playerId)
 	ChangeOtherPlayerClothes(playerId)

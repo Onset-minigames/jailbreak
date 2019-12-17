@@ -7,6 +7,7 @@
 
 AddEvent("OnPlayerInteractDoor", function(playerId, door, bWantsOpen)
 
+	print(Doors[door].x, Doors[door].y, Doors[door].z)
 	if Doors[door] then
 		if not Doors[door].jail and not Doors[door].guardian then
 			SetDoorOpen(door, not IsDoorOpen(door))
@@ -58,8 +59,10 @@ end
 --
 --
 AddRemoteEvent("controlInteract", function(playerid, groupName)
+
 	SetPlayerAnimation(playerid, "ENTERCODE")
 	Delay(2500, function()
 		ToogleDoorsGroup(groupName)
 	end)
+
 end)
