@@ -79,7 +79,7 @@ AddEvent("OnPlayerSteamAuth", function(playerId)
 end)
 
 --
--- Spawn player
+-- Player join
 --
 AddEvent("OnPlayerJoin", function(playerId)
 
@@ -89,6 +89,17 @@ AddEvent("OnPlayerJoin", function(playerId)
 	SetSpawnPlayer(playerId)
 	AddPlayerChatAll('<span color="#eeeeeeaa">' .. GetPlayerName(playerId) .. ' (' .. playerId .. ') joined the server</>')
 
+end)
+
+
+--
+-- Spawn player
+--
+AddEvent("OnPlayerSpawn", function(playerId)
+
+	ChangeClothing(playerId, "prisoner")
+	ChangeOtherPlayerClothes(playerId)
+	
 end)
 
 --

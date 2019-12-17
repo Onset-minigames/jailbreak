@@ -5,9 +5,11 @@
 -- @Source: https://github.com/Onset-minigames
 --
 
+--
+--
+--
 function ChangeClothing(playerId, roleName)
 
-	print(playerId, roleName)
 	Players[playerId].clothing = {
 		bodyNumber = Random(1, 5),
 		bodyColorNumber = Random(1, 10),
@@ -17,29 +19,24 @@ function ChangeClothing(playerId, roleName)
 	}
 
 	CallRemoteEvent(playerId, "ChangeClothing", playerId, Players[playerId].clothing)
-	for _, otherPlayerId in pairs(GetAllPlayers()) do
+	for _, otherPlayerId in pairs(GetStreamedPlayersForPlayer(playerId)) do
 		CallRemoteEvent(otherPlayerId, "ChangeClothing", playerId, Players[playerId].clothing)
  	end
 
 end
 
+--
+--
+--
 function ChangeOtherPlayerClothes(playerId)
 
-	for _, otherPlayerId in pairs(GetAllPlayers()) do
+	for _, otherPlayerId in pairs(GetStreamedPlayersForPlayer(playerId)) do
 		CallRemoteEvent(playerId, "ChangeClothing", otherPlayerId, Players[otherPlayerId].clothing)
  	end
 
 end
 
-AddEvent("OnPlayerSpawn", function(playerId)
-
-	ChangeClothing(playerId, "prisoner")
+-- TODO : REMOVE ME !
+AddCommand("r", function(playerId)
 	ChangeOtherPlayerClothes(playerId)
-	
-end)
-
-
-AddCommand("role", function(playerId, roleName) 
-	ChangeClothing(playerId, roleName)
-	Roles[roleName][playerId] = true
 end)
