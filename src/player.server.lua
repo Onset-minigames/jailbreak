@@ -42,6 +42,7 @@ function StartPlayersLocation()
 			end
 
 			SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
+			UpdateScoreboardData(playerId)
 
 		end
 	end
@@ -101,7 +102,7 @@ AddEvent("OnPlayerQuit", function(playerId)
 		local role = Players[playerId].role
 		if Roles[role][playerId] then
 			print("remove role !")
-			Roles[role][playerId] = nil
+			table.remove(Roles[role])
 			Players[playerId].role = nil
 		end
 	end
@@ -120,7 +121,7 @@ AddEvent('OnPlayerDeath', function(playerId, instigator)
 		local role = Players[playerId].role
 		if Roles[role][playerId] then
 			print("remove role !")
-			Roles[role][playerId] = nil
+			table.remove(Roles[role])
 			Players[playerId].role = nil
 			SetPlayerSpectate(playerId, true)
 		end

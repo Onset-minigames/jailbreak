@@ -52,14 +52,6 @@ AddCommand("tp", function(playerid, x, y, z)
 	
 end)
 
-AddCommand("delete", function()
-	DeleteDoors()
-end)
-
-AddCommand("door", function()
-	CreateDoors()
-end)
-
 AddCommand("save", function(playerid)
 	local x, y, z = GetPlayerLocation(playerid)
 	print("{ x = " .. x .. ", y = " .. y .. ", z = " .. z .." },")

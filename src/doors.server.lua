@@ -5,6 +5,8 @@
 -- @Source: https://github.com/Onset-minigames
 --
 
+Doors = {}
+
 AddEvent("OnPlayerInteractDoor", function(playerId, door, bWantsOpen)
 
 	print(Doors[door].x, Doors[door].y, Doors[door].z)
@@ -15,6 +17,7 @@ AddEvent("OnPlayerInteractDoor", function(playerId, door, bWantsOpen)
 			SetDoorOpen(door, not IsDoorOpen(door))
 		end
 	end
+
 end)
 
 --
@@ -32,19 +35,35 @@ end
 --
 --
 function CreateDoors()
-	for index, value in ipairs(Doors) do
-		local id = CreateDoor(value.type, value.x, value.y, value.z, value.rotation, value.interact)
-		Doors[index].id = id
+
+	print(phase)
+	for _, value in ipairs(Configs.doors) do
+		if not value.phase or value.phase and phase >= value.phase then
+
+			if value.unLock then
+				if phase < value.unLock then
+					value.interact = false
+				else
+					value.interact = true
+				end
+			end
+
+			local id = CreateDoor(value.type, value.x, value.y, value.z, value.rotation, value.interact)
+			Doors[id] = value
+		end
 	end
+
 end
 
 --
 --
 --
 function DeleteDoors()
-	for index, value in ipairs(Doors) do
-		DestroyDoor(Doors[index].id)
+
+	for index, _ in ipairs(Doors) do
+		DestroyDoor(index)
 	end
+
 end
 
 --
@@ -65,4 +84,13 @@ AddRemoteEvent("controlInteract", function(playerid, groupName)
 		ToogleDoorsGroup(groupName)
 	end)
 
+end)
+
+
+AddCommand("delete", function()
+	DeleteDoors()
+end)
+
+AddCommand("door", function()
+	CreateDoors()
 end)

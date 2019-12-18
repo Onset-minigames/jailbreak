@@ -7,6 +7,7 @@
 
 minPlayer = 3
 gameStatus = 0
+phase = 1
 
 --
 --
@@ -67,4 +68,27 @@ end
 
 AddCommand("min", function(playerid, number)
 	minPlayer = tonumber(number)
+end)
+
+AddCommand("phase", function(playerid, number)
+	AddPlayerChat(playerid, "phase : " .. tonumber(number))
+	phase = tonumber(number)
+end)
+
+--
+--
+--
+AddCommand("kick", function(playerId, playerToKick, ...)
+
+	playerToKick = tonumber(playerToKick)
+	raison = ""
+	for key, value in pairs({...}) do
+		if key == 1 then
+			raison = value
+		else
+			raison = raison .. " " .. value
+		end		
+	end
+	KickPlayer(playerToKick, raison)
+
 end)

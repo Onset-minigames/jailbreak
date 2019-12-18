@@ -3,12 +3,14 @@
 	"version": "1.0",
 	"client_scripts": [
 		"config.client.lua",
+		"src/scoreboard.client.lua",
 		"src/weapons.client.lua",
 		"src/doors.client.lua",
 		"src/clothing.client.lua"
 	],
 	"server_scripts": [
 		"config.server.lua",
+		"src/scoreboard.server.lua",
 		"src/chat.server.lua",
 		"src/roles.server.lua",
 		"src/clothing.server.lua",
@@ -16,5 +18,14 @@
 		"src/player.server.lua",
 		"src/game.server.lua",
 		"src/package.server.lua"
+	],
+	"files": [
+		"gui/scoreboard.html",
+		"gui/scoreboard.css",
+		"gui/scoreboard.js",
+		"gui/jquery.js",
+		"gui/xbbcode.js",
+		"gui/xbbcode.css"
 	]
+
 }

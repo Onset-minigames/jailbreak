@@ -10,7 +10,7 @@ local controlIsLocked = false
 --
 --
 --
-AddEvent("OnKeyPress", function(key)
+AddEvent("OnKeyRelease", function(key)
     if key == "E" then
         local NearestControle = GetNearestControle()
 		if NearestControle and controlIsLocked == false then
