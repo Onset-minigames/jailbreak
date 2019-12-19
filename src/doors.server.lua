@@ -35,7 +35,6 @@ end
 --
 function CreateDoors()
 
-	print(phase)
 	for _, value in ipairs(Configs.doors) do
 		local id = CreateDoor(value.type, value.x, value.y, value.z, value.rotation, value.interact)
 		Doors[id] = value

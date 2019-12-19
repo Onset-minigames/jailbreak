@@ -90,6 +90,6 @@ end)
 
 -- TODO : REMOVE ME
 AddCommand("spawn", function(playerId)
-	local spawnLocation = Spawns[Random(1, #Spawns)]
+	local spawnLocation = Configs.spawns[Random(1, #Configs.spawns)]
 	SetPlayerLocation(playerId, spawnLocation.x, spawnLocation.y, spawnLocation.z + 100, 90.0)
 end)
