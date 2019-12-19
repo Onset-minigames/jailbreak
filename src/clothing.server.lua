@@ -46,7 +46,17 @@ AddRemoteEvent("SpawnClothing", function(playerId)
 
 end)
 
+NPC = {}
 -- TODO : REMOVE ME !
-AddCommand("r", function(playerId)
-	ChangeOtherPlayerClothes(playerId)
+AddCommand("npc", function(playerId)
+	local x, y, z = GetPlayerLocation(playerId)
+	table.insert(NPC, CreateNPC(x, y, z, 0.0))
+end)
+
+AddCommand("dnpc", function(playerId)
+
+	for _, id in pairs(NPC) do
+		DestroyNPC(id)
+	end
+
 end)

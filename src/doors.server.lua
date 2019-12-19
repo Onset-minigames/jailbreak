@@ -9,7 +9,6 @@ Doors = {}
 
 AddEvent("OnPlayerInteractDoor", function(playerId, door, bWantsOpen)
 
-	print(Doors[door].x, Doors[door].y, Doors[door].z)
 	if Doors[door] then
 		if not Doors[door].jail and not Doors[door].guardian then
 			SetDoorOpen(door, not IsDoorOpen(door))
@@ -38,19 +37,8 @@ function CreateDoors()
 
 	print(phase)
 	for _, value in ipairs(Configs.doors) do
-		if not value.phase or value.phase and phase >= value.phase then
-
-			if value.unLock then
-				if phase < value.unLock then
-					value.interact = false
-				else
-					value.interact = true
-				end
-			end
-
-			local id = CreateDoor(value.type, value.x, value.y, value.z, value.rotation, value.interact)
-			Doors[id] = value
-		end
+		local id = CreateDoor(value.type, value.x, value.y, value.z, value.rotation, value.interact)
+		Doors[id] = value
 	end
 
 end
