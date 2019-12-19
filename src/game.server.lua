@@ -7,7 +7,6 @@
 
 minPlayer = 3
 gameStatus = 0
-phase = 1
 
 --
 --
@@ -58,7 +57,7 @@ function EndGame()
 		SetPlayerWeapon(playerId, 1, 0, true, 3, true)
 		SetPlayerHealth(playerId, 0)
 
-		Delay(1000, function( ... )
+		Delay(1000, function()
 			SetPlayerRespawnTime(playerId, 1000) -- 1s
 		end)
 
@@ -68,11 +67,6 @@ end
 
 AddCommand("min", function(playerid, number)
 	minPlayer = tonumber(number)
-end)
-
-AddCommand("phase", function(playerid, number)
-	AddPlayerChat(playerid, "phase : " .. tonumber(number))
-	phase = tonumber(number)
 end)
 
 --

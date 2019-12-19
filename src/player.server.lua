@@ -21,7 +21,7 @@ function StartPlayersLocation()
 			if Players[playerId].role == "prisoner" then
 
 				ChangeClothing(playerId, "prisoner")
-				local jailLocation = Jails[jail]
+				local jailLocation = Configs.jails[jail]
 				SetPlayerLocation(playerId, jailLocation.x, jailLocation.y, jailLocation.z + 100)
 
 				-- Give weapon (Random)
@@ -36,7 +36,7 @@ function StartPlayersLocation()
 			elseif Players[playerId].role == "guardian" then
 
 				ChangeClothing(playerId, "guardian")
-				SetPlayerLocation(playerId, Guardians.x, Guardians.y, Guardians.z + 100)
+				SetPlayerLocation(playerId, Configs.guardians.x, Configs.guardians.y, Configs.guardians.z + 100)
 				SetPlayerWeapon(playerId, 8, 200, true, 1, true)
 
 			end
@@ -54,7 +54,7 @@ end
 --
 function SetSpawnPlayer(playerId)
 
-	local spawnLocation = Spawns[Random(1, #Spawns)]
+	local spawnLocation = Configs.spawns[Random(1, #Configs.spawns)]
 	SetPlayerSpawnLocation(playerId, spawnLocation.x, spawnLocation.y, spawnLocation.z + 200, 90.0)
 
 end
@@ -64,7 +64,7 @@ end
 --
 function SpawnPlayer(playerId)
 
-	local spawnLocation = Spawns[Random(1, #Spawns)]
+	local spawnLocation = Configs.spawns[Random(1, #Configs.spawns)]
 	SetPlayerLocation(playerId, spawnLocation.x, spawnLocation.y, spawnLocation.z + 200)
 
 end
@@ -101,7 +101,6 @@ AddEvent("OnPlayerQuit", function(playerId)
 	if Players[playerId].role then
 		local role = Players[playerId].role
 		if Roles[role][playerId] then
-			print("remove role !")
 			table.remove(Roles[role])
 			Players[playerId].role = nil
 		end
@@ -120,7 +119,6 @@ AddEvent('OnPlayerDeath', function(playerId, instigator)
 	if Players[playerId].role then
 		local role = Players[playerId].role
 		if Roles[role][playerId] then
-			print("remove role !")
 			table.remove(Roles[role])
 			Players[playerId].role = nil
 			SetPlayerSpectate(playerId, true)

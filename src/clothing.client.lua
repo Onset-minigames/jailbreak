@@ -7,11 +7,11 @@
 
 function ChangeClothing(playerId, playerClothing)
 
-	local config = Clothing[playerClothing.role]
+	local config = Configs.clothing[playerClothing.role]
 
 	-- Body	
-	local bodyAsset  = BodyList[playerClothing.bodyNumber]	
-	local bodyColor = BodyColors[playerClothing.bodyColorNumber]
+	local bodyAsset  = Configs.bodyList[playerClothing.bodyNumber]	
+	local bodyColor = Configs.bodyColors[playerClothing.bodyColorNumber]
 	local bodyRed, bodyGreen, bodyBlue = HexToRGBA("0x" .. bodyColor)
 	local SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(playerId, "Body")
 	SkeletalMeshComponent:SetSkeletalMesh(USkeletalMesh.LoadFromAsset(bodyAsset))
@@ -20,8 +20,8 @@ function ChangeClothing(playerId, playerClothing)
 	SkeletalMeshComponent:SetColorParameterOnMaterials("Skin Color", FLinearColor(bodyRed / 255, bodyGreen / 255, bodyBlue / 255, 0.0))
 
 	-- Hair	
-	local hairAsset  = HairList[playerClothing.hairNumber]
-	local hairColor = HairColors[playerClothing.hairColorNumber]
+	local hairAsset  = Configs.hairList[playerClothing.hairNumber]
+	local hairColor = Configs.hairColors[playerClothing.hairColorNumber]
 	local hairRed, hairGreen, hairBlue = HexToRGBA("0x" .. hairColor)
 	SkeletalMeshComponent = GetPlayerSkeletalMeshComponent(playerId, "Clothing0")
 	SkeletalMeshComponent:SetSkeletalMesh(USkeletalMesh.LoadFromAsset(hairAsset))

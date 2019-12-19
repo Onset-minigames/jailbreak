@@ -2,14 +2,14 @@
 	"author": "samuelds",
 	"version": "1.0",
 	"client_scripts": [
-		"config.client.lua",
+		"config.lua",
 		"src/scoreboard.client.lua",
 		"src/weapons.client.lua",
 		"src/doors.client.lua",
 		"src/clothing.client.lua"
 	],
 	"server_scripts": [
-		"config.server.lua",
+		"config.lua",
 		"src/scoreboard.server.lua",
 		"src/chat.server.lua",
 		"src/roles.server.lua",
