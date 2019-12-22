@@ -12,7 +12,7 @@ AddEvent("OnPlayerInteractDoor", function(playerId, door, bWantsOpen)
 	if Doors[door] then
 		if not Doors[door].jail and not Doors[door].guardian then
 			SetDoorOpen(door, not IsDoorOpen(door))
-		elseif Players[playerId].role and Players[playerId].role == "guardian" then
+		elseif Players[playerId] and Players[playerId].role and Players[playerId].role == "guardian" then
 			SetDoorOpen(door, not IsDoorOpen(door))
 		end
 	end
@@ -57,8 +57,10 @@ end
 --
 --
 function ResetDoors()
+
 	DeleteDoors()
 	CreateDoors()
+
 end
 
 --
@@ -73,11 +75,3 @@ AddRemoteEvent("controlInteract", function(playerid, groupName)
 
 end)
 
-
-AddCommand("delete", function()
-	DeleteDoors()
-end)
-
-AddCommand("door", function()
-	CreateDoors()
-end)

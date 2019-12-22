@@ -31,7 +31,9 @@ end
 function ChangeOtherPlayerClothes(playerId)
 
 	for _, otherPlayerId in pairs(GetStreamedPlayersForPlayer(playerId)) do
-		CallRemoteEvent(playerId, "ChangeClothing", otherPlayerId, Players[otherPlayerId].clothing)
+		if Players[otherPlayerId] then
+			CallRemoteEvent(playerId, "ChangeClothing", otherPlayerId, Players[otherPlayerId].clothing)
+		end
  	end
 
 end
@@ -43,20 +45,5 @@ AddRemoteEvent("SpawnClothing", function(playerId)
 
 	ChangeClothing(playerId, "prisoner")
 	ChangeOtherPlayerClothes(playerId)
-
-end)
-
-NPC = {}
--- TODO : REMOVE ME !
-AddCommand("npc", function(playerId)
-	local x, y, z = GetPlayerLocation(playerId)
-	table.insert(NPC, CreateNPC(x, y, z, 0.0))
-end)
-
-AddCommand("dnpc", function(playerId)
-
-	for _, id in pairs(NPC) do
-		DestroyNPC(id)
-	end
 
 end)

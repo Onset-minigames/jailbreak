@@ -5,6 +5,7 @@
 		"config.lua",
 		"src/scoreboard.client.lua",
 		"src/weapons.client.lua",
+		"src/game.client.lua",
 		"src/doors.client.lua",
 		"src/clothing.client.lua"
 	],

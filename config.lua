@@ -7,6 +7,8 @@
 
 Configs = {}
 
+Configs.debug = false
+
 Configs.doors = {
 
 	-- GATES
@@ -54,31 +56,34 @@ Configs.doors = {
 	{ type = 4, x = -181561.000000, y = 75052.000000, z = 1530.000000, rotation = 180.0, interact = true },
 
 	-- OUTSIDE TOWER DOORS 1
-	{ type = 1, x = -184933.000000, y = 85744.000000, z = 2485.000000, rotation = 0.0, interact = false },
-	{ type = 1, x = -184594.000000, y = 85721.000000, z = 1435.000000, rotation = 0.0, interact = false },
+	{ type = 1, x = -184933.000000, y = 85744.000000, z = 2485.000000, rotation = 0.0, interact = true },
+	{ type = 1, x = -184594.000000, y = 85721.000000, z = 1435.000000, rotation = 0.0, interact = true },
 
 	-- OUTSIDE TOWER DOORS 2
-	{ type = 1, x = -169034.000000, y = 85910.000000, z = 2485.000000, rotation = -90.0, interact = false },
-	{ type = 1, x = -169057.000000, y = 85574.000000, z = 1435.000000, rotation = -90.0, interact = false },
+	{ type = 1, x = -169034.000000, y = 85910.000000, z = 2485.000000, rotation = -90.0, interact = true },
+	{ type = 1, x = -169057.000000, y = 85574.000000, z = 1435.000000, rotation = -90.0, interact = true },
 
 	-- OUTSIDE TOWER DOORS 3
-	{ type = 1, x = -169936.000000, y = 74072.000000, z = 2485.000000, rotation = -270.0, interact = false },
-	{ type = 1, x = -169912.000000, y = 74406.000000, z = 1435.000000, rotation = 90.0, interact = false },
+	{ type = 1, x = -169936.000000, y = 74072.000000, z = 2485.000000, rotation = -270.0, interact = true },
+	{ type = 1, x = -169912.000000, y = 74406.000000, z = 1435.000000, rotation = 90.0, interact = true },
 
 	-- OUTSIDE TOWER DOORS 4
-	{ type = 1, x = -179206.000000, y = 70895.000000, z = 2485.000000, rotation = -90.0, interact = false },
-	{ type = 1, x = -179345.000000, y = 70563.000000, z = 1435.000000, rotation = 90.0, interact = false },
+	{ type = 1, x = -179206.000000, y = 70895.000000, z = 2485.000000, rotation = -90.0, interact = true },
+	{ type = 1, x = -179345.000000, y = 70563.000000, z = 1435.000000, rotation = 90.0, interact = true },
 
 	-- OUTSIDE TOWER DOORS 5
-	{ type = 1, x = -183406.000000, y = 79789.000000, z = 2685.000000, rotation = 0.0, interact = false },
-	{ type = 1, x = -183067.000000, y = 79766.000000, z = 1635.000000, rotation = 0.0, interact = false },
+	{ type = 1, x = -183406.000000, y = 79789.000000, z = 2685.000000, rotation = 0.0, interact = true },
+	{ type = 1, x = -183067.000000, y = 79766.000000, z = 1635.000000, rotation = 0.0, interact = true },
 
 	-- FENCE DOORS OUTSIDE
+	{ type = 7, x = -169057.000000, y = 84560.000000, z = 1430.000000, rotation = -90.0, interact = true }, -- TOWER
+	{ type = 7, x = -170690.000000, y = 74542.000000, z = 1430.000000, rotation = 0.0, interact = true }, -- TOWER
+	{ type = 7, x = -179150.000000, y = 69248.000000, z = 1430.000000, rotation = -180.0, interact = true }, -- TOWER
+	{ type = 7, x = -183040.000000, y = 85842.000000, z = 1430.000000, rotation = 0.0, interact = true }, -- TOWER
+
 	{ type = 7, x = -171158.000000, y = 76860.000000, z = 1430.000000, rotation = -90.0, interact = true },
 	{ type = 7, x = -173089.000000, y = 74543.000000, z = 1429.000000, rotation = 0.0, interact = true },
-	{ type = 7, x = -170690.000000, y = 74542.000000, z = 1430.000000, rotation = 0.0, interact = false },
 	{ type = 7, x = -171036.000000, y = 84092.000000, z = 1430.000000, rotation = 0.0, interact = true },
-	{ type = 7, x = -169057.000000, y = 84560.000000, z = 1430.000000, rotation = -90.0, interact = false },
 	{ type = 7, x = -180190.000000, y = 84442.000000, z = 1430.000000, rotation = 0.0, interact = true },
 	{ type = 7, x = -181422.000000, y = 83260.000000, z = 1430.000000, rotation = 90.0, interact = true },
 	{ type = 7, x = -181422.000000, y = 82410.000000, z = 1430.000000, rotation = 90.0, interact = true },
@@ -88,12 +93,12 @@ Configs.doors = {
 	{ type = 7, x = -184122.000000, y = 84410.000000, z = 1429.000000, rotation = 90.0, interact = true },
 	{ type = 7, x = -180669.000000, y = 76982.000000, z = 1430.000000, rotation = 90.0, interact = true }, -- BASKET
 	{ type = 7, x = -182229.000000, y = 75316.000000, z = 1430.000000, rotation = -90.0, interact = true },
-	{ type = 7, x = -182108.000000, y = 74024.000000, z = 1430.000000, rotation = -90.0, interact = false }, -- GRANDE COUR
+	{ type = 7, x = -182108.000000, y = 74024.000000, z = 1430.000000, rotation = -90.0, interact = false }, -- GRANDE COUR (spawn)
 	{ type = 7, x = -180090.000000, y = 69278.000000, z = 1430.000000, rotation = -180.0, interact = true }, -- GRANDE COUR GARDE
 	{ type = 7, x = -177990.000000, y = 69628.000000, z = 1430.000000, rotation = 180.0, interact = true },
-	{ type = 7, x = -179150.000000, y = 69248.000000, z = 1430.000000, rotation = -180.0, interact = false },
 	{ type = 7, x = -177108.000000, y = 81660.000000, z = 1430.000000, rotation = -90.0, interact = true }, -- PETITE COUR
 	{ type = 7, x = -176408.000000, y = 80210.000000, z = 1230.000000, rotation = -90.0, interact = true }, -- PETITE COUR BASKET
+
 	{ type = 7, x = -177340.000000, y = 72892.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
 	{ type = 7, x = -177340.000000, y = 72543.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
 	{ type = 7, x = -177340.000000, y = 72192.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
@@ -568,9 +573,50 @@ Configs.jails = {
 
 Configs.guardians = {
 
-	x = -173470.171875,
-	y = 75124.515625,
-	z = 1528.000000,
+	spawn = {
+		 x = -173601.53125,
+		 y = 75798.9765625,
+		 z = 1628.1397705078,
+	},
+	armory = {
+		{
+			x = -174285.796875,
+			y = 75106.2890625,
+			z = 1628.1453857422,
+		},
+	},
+	waypoints = {
+		armory = {
+			x = -174285.796875,
+			y = 75106.2890625,
+			z = 1628.1453857422,
+			text = "Armory",
+		},
+		blockA = {
+			x = -174713.609375,
+			y = 74158.5390625,
+			z = 1628.1500244141,
+			text = "Block A",
+		},
+		blockB = {
+			x = -176288.8125,
+			y = 76231.578125,
+			z = 1628.1500244141,
+			text = "Block B",
+		},
+		blockC = {
+			x = -178380.21875,
+			y = 75108.3046875,
+			z = 1628.3073730469,
+			text = "Block C",
+		},
+		blockD = {
+			x = -174193.234375,
+			y = 79867.6015625,
+			z = 1628.1500244141,
+			text = "Block D",
+		},
+	}
 
 }
 
@@ -604,7 +650,7 @@ Configs.spawns = {
 
 }
 
-Configs.looting = {
+Configs.loot = {
 
 	{ x = -175790.203125, y = 73929.953125, z = 1628.1500244141 },
 	{ x = -175772.3125, y = 73471.40625, z = 1628.1500244141 },
@@ -673,6 +719,10 @@ Configs.looting = {
 	{ x = -180732.078125, y = 74253.109375, z = 1979.1500244141 },
 	{ x = -180955.140625, y = 74248.828125, z = 1979.0134277344 },
 	{ x = -181420.140625, y = 74244.234375, z = 1979.1500244141 },
+	{ x = -178636.21875, y = 75965.609375, z = 1979.1500244141 },
+	{ x = -176884.640625, y = 78820.125, z = 1628.1500244141 },
+	{ x = -177009.828125, y = 78821.8359375, z = 1628.1500244141 },
+	{ x = -177134.59375, y = 78822.234375, z = 1628.1500244141 },
 
 }
 
@@ -771,7 +821,7 @@ Configs.clothing = {
 
 Configs.controles = {
 
-	{ x = -175160.3125, y = 74113.1640625, z = 1628.1500244141, group = "blockA" },
+	{ x = -174705.078125, y = 74114.2890625, z = 1628.1500244141, group = "blockA" },
 	{ x = -175157.796875, y = 74123.8984375, z = 1978.1500244141, group = "blockATop" },
 	{ x = -176569.96875, y = 76844.046875, z = 1628.1500244141, group = "blockB" },
 	{ x = -178876.75, y = 74431.5234375, z = 1630.6875, group = "blockC" },
@@ -779,3 +829,10 @@ Configs.controles = {
 	{ x = -174489.890625, y = 79448.3125, z = 1980.6873779297, group = "blockD" },
 
 }
+
+
+-- Tower
+-- { x = -169714.125, y = 74205.9921875, z = 1528.1500244141 }
+-- { x = -169255.515625, y = 85770.75, z = 1528.1500244141 }
+-- { x = -184797.578125, y = 85522.84375, z = 1528.1500244141 }
+-- { x = -179427.6875, y = 70754.203125, z = 1528.15 00244141 }

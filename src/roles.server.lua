@@ -24,8 +24,10 @@ function SetRole()
 
 	-- Prisoner
 	for _, playerId in pairs(GetAllPlayers()) do
-		table.insert(Roles.prisoner, playerId)
-		Players[playerId].role = "prisoner"
+		if Players[playerId] then
+			table.insert(Roles.prisoner, playerId)
+			Players[playerId].role = "prisoner"
+		end
 	end
 
 	-- Guardian
@@ -47,10 +49,12 @@ function SetRole()
 		local draw = Random(1, totalPrisoner)
 		if Roles.prisoner[draw] then
 			local playerId = Roles.prisoner[draw]
-			table.insert(Roles.guardian, playerId)
-			Roles.prisoner[draw] = nil
-			Players[playerId].role = "guardian"
-			currentGuardian = currentGuardian + 1
+			if Players[playerId] then
+				table.insert(Roles.guardian, playerId)
+				Roles.prisoner[draw] = nil
+				Players[playerId].role = "guardian"
+				currentGuardian = currentGuardian + 1
+			end
 		end
 
 		print("Boucle !!!")
