@@ -3,6 +3,7 @@
 	"version": "1.0",
 	"client_scripts": [
 		"config.lua",
+		"src/utils.common.lua",
 		"src/scoreboard.client.lua",
 		"src/weapons.client.lua",
 		"src/game.client.lua",
@@ -11,6 +12,7 @@
 	],
 	"server_scripts": [
 		"config.lua",
+		"src/utils.common.lua",
 		"src/scoreboard.server.lua",
 		"src/chat.server.lua",
 		"src/roles.server.lua",

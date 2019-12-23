@@ -45,7 +45,6 @@ function SetRole()
 
 	local currentGuardian = 1
 	while currentGuardian <= needGuardian do
-
 		local draw = Random(1, totalPrisoner)
 		if Roles.prisoner[draw] then
 			local playerId = Roles.prisoner[draw]
@@ -56,8 +55,6 @@ function SetRole()
 				currentGuardian = currentGuardian + 1
 			end
 		end
-
-		print("Boucle !!!")
 	end
 
 	-- TODO : DETERMINER LE CHEF DES GARDIENS

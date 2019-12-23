@@ -59,7 +59,7 @@ end
 function ResetDoors()
 
 	DeleteDoors()
-	CreateDoors()
+	--CreateDoors()
 
 end
 

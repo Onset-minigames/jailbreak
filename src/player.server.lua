@@ -7,38 +7,49 @@
 
 Players = {}
 
+
 --
 -- Spawn jail or administration
 --
 function StartPlayersLocation()
 
-	local jail = 1
-	for _, playerId in pairs(GetAllPlayers()) do
-		
-		if Players[playerId] and Players[playerId].role then
+	local Jails = {}
+	local jailIndex = 1
+	local prisoners = Copy(Roles.prisoner)
+	local totalPrisoner = #Roles.prisoner
 
-			SetPlayerHealth(playerId, 100)
-			if Players[playerId].role == "prisoner" then
-
-				ChangeClothing(playerId, "prisoner")
-				local jailLocation = Configs.jails[jail]
-				SetPlayerLocation(playerId, jailLocation.x, jailLocation.y, jailLocation.z + 100)
-				jail = jail + 1
-
-			elseif Players[playerId].role == "guardian" then
-
-				ChangeClothing(playerId, "guardian")
-				SetPlayerLocation(playerId, Configs.guardians.spawn.x, Configs.guardians.spawn.y, Configs.guardians.spawn.z + 100)
-
-			end
-
-			-- Set role into
-			CallRemoteEvent(playerId, "SetRole", Players[playerId].role)
-			SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
-
-		end
+	while jailIndex <= totalPrisoner do
+	    local draw = Random(1, #prisoners)
+	    local playerId = prisoners[draw]
+	    Jails[playerId] = jailIndex
+	    table.remove(prisoners, draw)
+	    jailIndex = jailIndex + 1
 	end
 
+	-- tp prisoner
+	for _, playerId in pairs(Roles.prisoner) do
+
+		local jail = Jails[playerId]
+		local jailLocation = Configs.jails[jail]
+		SetPlayerLocation(playerId, jailLocation.spawn.x, jailLocation.spawn.y, jailLocation.spawn.z + 100)
+
+		ChangeClothing(playerId, "prisoner")
+		CallRemoteEvent(playerId, "SetRole", Players[playerId].role)
+		SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
+
+	end
+
+	-- tp guardian
+	for _, playerId in pairs(Roles.guardian) do
+
+		SetPlayerLocation(playerId, Configs.guardians.spawn.x, Configs.guardians.spawn.y, Configs.guardians.spawn.z + 100)
+
+		ChangeClothing(playerId, "guardian")		
+		CallRemoteEvent(playerId, "SetRole", Players[playerId].role)
+		SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
+
+	end
+	
 end
 
 --

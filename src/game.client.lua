@@ -54,8 +54,8 @@ end
 function GetNearestLoot()
 
 	local x, y, z = GetPlayerLocation()
-	for index, value in pairs(Configs.loot) do
-		local dist = GetDistance3D(x, y, z, value.x, value.y, value.z)
+	for index, value in pairs(Configs.jails) do
+		local dist = GetDistance3D(x, y, z, value.loot.x, value.loot.y, value.loot.z)
 		if dist < 50.0 then
 			return index
 		end
