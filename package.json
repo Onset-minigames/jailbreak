@@ -15,6 +15,7 @@
 		"src/utils.common.lua",
 		"src/scoreboard.server.lua",
 		"src/chat.server.lua",
+		"src/loot.server.lua",
 		"src/roles.server.lua",
 		"src/clothing.server.lua",
 		"src/doors.server.lua",

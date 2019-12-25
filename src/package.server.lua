@@ -38,8 +38,8 @@ AddEvent("OnPackageStart", function()
 	RunTimer()
 
 	-- Objects
-	CreateObject(1416, -174707.00000, 74082.00000, 1660.00000)
-	CreateObject(889, -163735.484375, 74668.9765625, 1428.9571533203, 0)
-
+	for _, value in pairs(Configs.objects) do
+		CreateObject(value.modelID, value.x, value.y, value.z, value.rx, value.ry, value.rz)
+	end
 
 end)

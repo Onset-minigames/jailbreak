@@ -41,43 +41,11 @@ end)
 --
 --
 --
-function GenerateLoot()
-
-	for index, _ in pairs(Configs.loot) do
-		
-		local draw = Random(1, 6)
-		if 3 == draw then
-			Configs.loot[index].weapons = true
-		else
-			Configs.loot[index].weapons = false			
-		end
-	end
-
-end
-
---
---
---
-AddRemoteEvent("getLoot", function(playerId, index)
-
-	if Configs.loot[index].weapons and Configs.loot[index].weapons == true then
-		SetPlayerAnimation(playerId, "PICKUP_LOWER")
-		Configs.loot[index].weapons = false
-		SetPlayerWeapon(playerId, 3, Random(5, 20), false, 3, false)
-	else
-		SetPlayerAnimation(playerId, "DONTKNOW")
-	end
-
-end)
-
-
---
---
---
 function StartGame() 
 
-	GenerateLoot()
 	SetRole()
+	GenerateLoot()
+	GenerateJailLoot()
 	StartPlayersLocation()
 	AddPlayerChatAll('<span color="#eeeeeeaa">Que le jeu commence !</>')
 	gameStatus = 2
@@ -162,6 +130,24 @@ if Configs.debug == true then
 		print("{ x = " .. x .. ", y = " .. y .. ", z = " .. z .." },")
 	end)
 
+	--
+	local i = 1	
+	local first = {}
+	local second = {}
+	AddCommand("j", function(playerId)
+
+		local x, y, z = GetPlayerLocation(playerId)
+		if i == 1 then
+			first = { x = x, y = y, z = z }
+			i = 2
+		elseif i == 2 then
+			second = { x = x, y = y, z = z }
+			print("{ spawn = { x = " .. first.x .. ", y = " .. first.y .. ", z = " .. first.z .." }, loot  = { x = " .. second.x .. ", y = " .. second.y .. ", z = " .. second.z .." }, },")
+			i = 1
+		end
+		
+	end)
+
 
 	-- TP
 	AddCommand("jail", function(playerid)
@@ -205,6 +191,7 @@ if Configs.debug == true then
 	--
 	AddCommand("min", function(playerid, number)
 
+		AddPlayerChatAll("Set min player to " .. number)
 		minPlayer = tonumber(number)
 
 	end)
@@ -241,5 +228,42 @@ if Configs.debug == true then
 		CreateDoors()
 	end)
 
+	AddCommand("test", function()
+		-- GenerateLoot()
+
+
+		local draw = Random(1, 1)
+		if Configs.jails[draw] and Configs.jails[draw].loot then
+			print(Configs.jails[draw].loot.x)
+		end
+
+		local totalLoot = #Roles.prisoner
+		local needLoot = 0
+		if totalLoot < 5 then
+			needLoot = 1
+		else 
+			for i = 1, totalLoot do
+				if i % 3 == 0 then
+					needLoot = needLoot + 1
+				end
+			end
+		end
+
+		-- Set to false
+		for index, _ in pairs(Configs.jails) do
+			if Configs.jails[index].loot then
+				Configs.jails[index].loot.weapons = false
+			end
+		end
+
+		local currentLoot = 1
+		while currentLoot <= needLoot do
+			local draw = Random(1, 1)
+			print("draw : " .. draw .. " of " .. totalLoot)
+			--print(Configs.jails[draw])
+			currentLoot = currentLoot + 1
+		end
+
+	end)
 
 end

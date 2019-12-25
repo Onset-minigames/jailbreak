@@ -15,7 +15,7 @@ function GetNearestArmory()
     local x, y, z = GetPlayerLocation()
     for index, value in pairs(Configs.guardians.armory) do
         local dist = GetDistance3D(x, y, z, value.x, value.y, value.z)
-        if dist < 50.0 then
+        if dist < 100.0 then
             return index
         end
     end
@@ -51,18 +51,37 @@ end
 --
 --
 --
-function GetNearestLoot()
+function GetNearestJailLoot()
 
 	local x, y, z = GetPlayerLocation()
 	for index, value in pairs(Configs.jails) do
-		local dist = GetDistance3D(x, y, z, value.loot.x, value.loot.y, value.loot.z)
-		if dist < 50.0 then
-			return index
-		end
+        if value.loot then
+    		local dist = GetDistance3D(x, y, z, value.loot.x, value.loot.y, value.loot.z)
+    		if dist < 50.0 then
+    			return index
+    		end
+        end
 	end
 	return false
 
 end
+
+--
+--
+--
+function GetNearestLoot()
+
+    local x, y, z = GetPlayerLocation()
+    for index, value in pairs(Configs.loot) do
+        local dist = GetDistance3D(x, y, z, value.x, value.y, value.z)
+        if dist < 50.0 then
+            return index
+        end
+    end
+    return false
+
+end
+
 
 
 local controlIsLocked = false
@@ -72,7 +91,6 @@ local searchIsLocked = false
 --
 --
 AddEvent("OnKeyRelease", function(key)
-
 
     if key == "F" then
 
@@ -96,15 +114,25 @@ AddEvent("OnKeyRelease", function(key)
         end
 
 
-    	-- Loot
-        local nearestLoot = GetNearestLoot()
-		if nearestLoot and controlIsLocked == false then
+    	-- Jail Loot
+        local nearestJailLoot = GetNearestJailLoot()
+		if nearestJailLoot and controlIsLocked == false then
     		controlIsLocked = true
-            CallRemoteEvent("getLoot", nearestLoot)
+            CallRemoteEvent("getJailLoot", nearestJailLoot)
             Delay(2500, function()
             	controlIsLocked = false
             end)
 		end
+
+        -- Loot
+        local nearestLoot = GetNearestLoot()
+        if nearestLoot and controlIsLocked == false then
+            controlIsLocked = true
+            CallRemoteEvent("getLoot", nearestLoot)
+            Delay(2500, function()
+                controlIsLocked = false
+            end)
+        end
 
     	-- Control panel
         local nearestControle = GetNearestControle()
