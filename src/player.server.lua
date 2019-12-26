@@ -20,8 +20,10 @@ function StartPlayersLocation()
 	local prisoners = {}
 
 	-- Copy
-	for _, playerId in pairs(Roles.prisoner) do
-		table.insert(prisoners, playerId)
+	for playerId, data in pairs(Players) do
+		if data.ready and data.role and "prisoner" == data.role then
+			table.insert(prisoners, playerId)
+		end
 	end
 	local totalPrisoner = #prisoners
 
@@ -38,32 +40,30 @@ function StartPlayersLocation()
 	print("end while")
 
 	-- tp prisoner
-	for _, playerId in pairs(Roles.prisoner) do
+	for playerId, data in pairs(Players) do
 
-		local jail = Jails[playerId]
-		local jailLocation = Configs.jails[jail]
-		SetPlayerLocation(playerId, jailLocation.spawn.x, jailLocation.spawn.y, jailLocation.spawn.z + 100)
+		if data.role and data.ready then
 
-		ChangeClothing(playerId, "prisoner")
-		CallRemoteEvent(playerId, "SetRole", Players[playerId].role)
-		SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
-		SetPlayerDimension(playerId, 1)
-		SetPlayerVoiceDimension(playerId, 1)
-		SetPlayerHealth(playerId, 100)
+			if "prisoner" == data.role then
 
-	end
+				local jail = Jails[playerId]
+				local jailLocation = Configs.jails[jail]
+				--SetPlayerLocation(playerId, jailLocation.spawn.x, jailLocation.spawn.y, jailLocation.spawn.z + 100)
 
-	-- tp guardian
-	for _, playerId in pairs(Roles.guardian) do
+			elseif "guardian" == data.role then
 
-		SetPlayerLocation(playerId, Configs.guardians.spawn.x, Configs.guardians.spawn.y, Configs.guardians.spawn.z + 100)
+				--SetPlayerLocation(playerId, Configs.guardians.spawn.x, Configs.guardians.spawn.y, Configs.guardians.spawn.z + 100)
 
-		ChangeClothing(playerId, "guardian")		
-		CallRemoteEvent(playerId, "SetRole", Players[playerId].role)
-		SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
-		SetPlayerDimension(playerId, 1)
-		SetPlayerVoiceDimension(playerId, 1)
-		SetPlayerHealth(playerId, 100)
+			end
+
+			ChangeClothing(playerId, data.role)
+			CallRemoteEvent(playerId, "SetRole", data.role)
+			SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
+			SetPlayerDimension(playerId, 1)
+			SetPlayerVoiceDimension(playerId, 1)
+			SetPlayerHealth(playerId, 100)
+
+		end
 
 	end
 
@@ -88,6 +88,21 @@ function SpawnPlayer(playerId)
 
 	local spawnLocation = Configs.spawns[Random(1, #Configs.spawns)]
 	SetPlayerLocation(playerId, spawnLocation.x, spawnLocation.y, spawnLocation.z + 200)
+
+end
+
+--
+-- Count player ready
+--
+function GetPlayerReadyCount()
+
+	local total = 0
+	for _, playerId in pairs(GetAllPlayers()) do
+		if Players[playerId] and Players[playerId].ready then
+			total = total + 1
+		end
+	end
+	return total
 
 end
 
@@ -118,13 +133,8 @@ end)
 --
 AddEvent("OnPlayerQuit", function(playerId)
 
-	-- Remove player on team
+	-- Remove player
 	if Players[playerId] then
-		if Players[playerId].role then
-			local role = Players[playerId].role
-			table.remove(Roles[role])
-			Players[playerId].role = nil
-		end
 		Players[playerId] = nil	
 	end
 
@@ -140,7 +150,6 @@ AddEvent('OnPlayerDeath', function(playerId, instigator)
 	-- Remove player on team
 	if Players[playerId] and Players[playerId].role then
 		local role = Players[playerId].role
-		table.remove(Roles[role])
 		Players[playerId].role = nil
 		SetPlayerSpectate(playerId, true)
 	end
@@ -164,12 +173,14 @@ AddEvent("OnPlayerWeaponShot", function(playerId, weapon, hittype, otherPlayerId
 	if otherPlayerId ~= 0 and weapon == 21 and hittype == HIT_PLAYER then
 		if Players[otherPlayerId].ragdoll == false or Players[otherPlayerId].ragdoll == nil then
 			Players[otherPlayerId].ragdoll = true
-			local x, y, z = GetPlayerLocation(otherPlayerId) -- Tempo fix
-			EquipPlayerWeaponSlot(otherPlayerId, 0) -- Tempo fix
+			-- local x, y, z = GetPlayerLocation(otherPlayerId) -- Tempo fix
+			-- EquipPlayerWeaponSlot(otherPlayerId, 0) -- Tempo fix
+			SetPlayerAnimation(otherPlayerId, "LAY01")
 			SetPlayerRagdoll(otherPlayerId, true)
 			Delay(10000, function()
+				SetPlayerAnimation(otherPlayerId, "STOP")
 				SetPlayerRagdoll(otherPlayerId, false)
-				SetPlayerLocation(otherPlayerId, x, y, z, 0.0) -- Tempo fix
+				-- SetPlayerLocation(otherPlayerId, x, y, z, 0.0) -- Tempo fix
 				Players[otherPlayerId].ragdoll = false
 			end)
 		end
@@ -188,5 +199,17 @@ AddEvent("OnPlayerDamage", function(playerId, damageType, amount)
 		print(playerId, damagetype, amount)
 		SetPlayerHealth(playerId, 0)
 	end
+
+end)
+
+
+--
+--
+--
+AddRemoteEvent("OnPlayerReady", function(playerId)
+
+	ChangeClothing(playerId, "prisoner")
+	ChangeOtherPlayerClothes(playerId)
+	Players[playerId].ready = true
 
 end)

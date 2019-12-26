@@ -8,19 +8,6 @@
 --
 --
 --
-function Count(table)
-	
-	local total = 0
-	for _, _ in pairs(table) do
-		total = total + 1
-	end
-	return total
-
-end
-
---
---
---
 AddEvent("OnPackageStop", function()
 
 	-- Delete Doors

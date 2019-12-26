@@ -38,12 +38,3 @@ function ChangeOtherPlayerClothes(playerId)
 
 end
 
---
---
---
-AddRemoteEvent("SpawnClothing", function(playerId)
-
-	ChangeClothing(playerId, "prisoner")
-	ChangeOtherPlayerClothes(playerId)
-
-end)

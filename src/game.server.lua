@@ -69,6 +69,10 @@ function StartGame()
 
 end
 
+AddCommand("debug", function(playerId)
+	print(GetPlayerReadyCount(), GetPlayerCount())
+end)
+
 --
 --
 --
@@ -77,16 +81,18 @@ function RunTimer()
 	
 	CheckTimer = CreateTimer(function()
 
-		if GetPlayerCount() >= minPlayer and gameStatus == 0 then
+		if GetPlayerReadyCount() >= minPlayer and gameStatus == 0 then
 			gameStatus = 1
 			StartGame()
-		elseif (Count(Roles.prisoner) == 0 or Count(Roles.guardian) == 0) and gameStatus == 2 then
+		elseif (GetPrisonerCount() == 0 or GetGuardianCount() == 0) and gameStatus == 2 then
 			gameStatus = 3
 			AddPlayerChatAll('<span color="#eeeeeeaa">Fin du jeu, GG à tous !</>')
 			EndGame()
 			Delay(10000, function() -- Pause de 10s
 				gameStatus = 0
 			end)
+		elseif gameStatus == 2 then
+			print("prisoner : " .. GetPrisonerCount(), "guardian : " .. GetGuardianCount())
 		end
 
 	end, 1000)
@@ -98,7 +104,6 @@ end
 --
 function EndGame()
 
-	ResetRoles()
 	ResetGameDoors()
 
 	for _, playerId in pairs(GetAllPlayers()) do

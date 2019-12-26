@@ -175,7 +175,7 @@ end)
 --
 AddEvent("OnPlayerSpawn", function()
 
-    CallRemoteEvent("SpawnClothing")
+    CallRemoteEvent("OnPlayerReady")
 
 end)
 

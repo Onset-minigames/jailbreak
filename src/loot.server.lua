@@ -12,7 +12,7 @@ function GenerateJailLoot()
 
 	print("start GenerateLoot")
 
-	local totalLoot = #Roles.prisoner
+	local totalLoot = GetPrisonerCount()
 	local needLoot = 0
 	if totalLoot < 5 then
 		needLoot = 1

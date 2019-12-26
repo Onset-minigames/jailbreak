@@ -5,6 +5,20 @@
 -- @Source: https://github.com/Onset-minigames
 --
 
+
+--
+--
+--
+function Count(table)
+    
+    local total = 0
+    for _, _ in pairs(table) do
+        total = total + 1
+    end
+    return total
+
+end
+
 --
 -- Copy table
 --

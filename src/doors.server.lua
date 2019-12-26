@@ -13,8 +13,12 @@ AddEvent("OnPlayerInteractDoor", function(playerId, door, bWantsOpen)
 	if GameDoors[door] then
 		if not GameDoors[door].jail and not GameDoors[door].guardian then
 			SetDoorOpen(door, not IsDoorOpen(door))
-		elseif Players[playerId] and Players[playerId].role and Players[playerId].role == "guardian" then
-			SetDoorOpen(door, not IsDoorOpen(door))
+		elseif Players[playerId] and Players[playerId].role and "guardian" == Players[playerId].role then
+			if GameDoors[door].jail then
+				SetDoorOpen(door, true)
+			else
+				SetDoorOpen(door, not IsDoorOpen(door))
+			end
 		end
 	end
 
@@ -116,12 +120,7 @@ AddRemoteEvent("controlInteract", function(playerId, groupName)
 	if dimension == 1 then
 		SetPlayerAnimation(playerId, "ENTERCODE")
 		Delay(2500, function()
-			if groupName == "blockA" then
-				blockAStatus = not blockAStatus
-				SetDoorsGroup(groupName, blockAStatus)
-			else
-				ToogleDoorsGroup(groupName)
-			end
+			SetDoorsGroup(groupName, true)
 		end)
 	end
 
