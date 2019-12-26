@@ -24,7 +24,8 @@ end
 AddEvent("OnPackageStop", function()
 
 	-- Delete Doors
-	DeleteDoors()
+	DeleteLobbyDoors()
+	DeleteGameDoors()
 
 end)
 
@@ -34,12 +35,14 @@ end)
 AddEvent("OnPackageStart", function()
 
 	-- Create Doors
-	CreateDoors()
+	CreateGameDoors()
+	CreateLobbyDoors()
 	RunTimer()
 
 	-- Objects
 	for _, value in pairs(Configs.objects) do
-		CreateObject(value.modelID, value.x, value.y, value.z, value.rx, value.ry, value.rz)
+		local objectId = CreateObject(value.modelID, value.x, value.y, value.z, value.rx, value.ry, value.rz)
+		SetObjectDimension(objectId, 1)
 	end
 
 end)

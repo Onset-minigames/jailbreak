@@ -36,6 +36,21 @@ AddRemoteEvent("SetRole", function(role)
 
 end)
 
+--
+--
+--
+function GetNearestTower()
+
+    local x, y, z = GetPlayerLocation()
+    for index, value in pairs(Configs.towers) do
+        local dist = GetDistance3D(x, y, z, value.x, value.y, value.z)
+        if dist < 60.0 then
+            return index
+        end
+    end
+    return false
+
+end
 
 --
 --
@@ -104,15 +119,21 @@ AddEvent("OnKeyRelease", function(key)
 
     elseif key == "E" then
 
+        -- Towers
+        local nearestTower = GetNearestTower()
+        if nearestTower and controlIsLocked == false then
+            controlIsLocked = true
+            CallRemoteEvent("tpTower", nearestTower)
+            controlIsLocked = false
+        end
+
         -- Armory
         local nearestArmory = GetNearestArmory()
         if nearestArmory and controlIsLocked == false then
-
             controlIsLocked = true
             CallRemoteEvent("giveWeapons")
             controlIsLocked = false
         end
-
 
     	-- Jail Loot
         local nearestJailLoot = GetNearestJailLoot()

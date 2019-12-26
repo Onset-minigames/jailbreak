@@ -13,18 +13,29 @@ Players = {}
 --
 function StartPlayersLocation()
 
+	print("start StartPlayersLocation")
+
 	local Jails = {}
 	local jailIndex = 1
-	local prisoners = Copy(Roles.prisoner)
-	local totalPrisoner = #Roles.prisoner
+	local prisoners = {}
 
-	while jailIndex <= totalPrisoner do
-	    local draw = Random(1, #prisoners)
-	    local playerId = prisoners[draw]
-	    Jails[playerId] = jailIndex
-	    table.remove(prisoners, draw)
-	    jailIndex = jailIndex + 1
+	-- Copy
+	for _, playerId in pairs(Roles.prisoner) do
+		table.insert(prisoners, playerId)
 	end
+	local totalPrisoner = #prisoners
+
+	print("start while")
+	while jailIndex <= totalPrisoner do
+	    local draw = Random(1, totalPrisoner)
+	    if prisoners[draw] then
+	    	local playerId = prisoners[draw]
+		    Jails[playerId] = jailIndex
+		    table.remove(prisoners, draw)
+		    jailIndex = jailIndex + 1
+	    end
+	end
+	print("end while")
 
 	-- tp prisoner
 	for _, playerId in pairs(Roles.prisoner) do
@@ -36,6 +47,9 @@ function StartPlayersLocation()
 		ChangeClothing(playerId, "prisoner")
 		CallRemoteEvent(playerId, "SetRole", Players[playerId].role)
 		SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
+		SetPlayerDimension(playerId, 1)
+		SetPlayerVoiceDimension(playerId, 1)
+		SetPlayerHealth(playerId, 100)
 
 	end
 
@@ -47,8 +61,13 @@ function StartPlayersLocation()
 		ChangeClothing(playerId, "guardian")		
 		CallRemoteEvent(playerId, "SetRole", Players[playerId].role)
 		SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
+		SetPlayerDimension(playerId, 1)
+		SetPlayerVoiceDimension(playerId, 1)
+		SetPlayerHealth(playerId, 100)
 
 	end
+
+	print("end StartPlayersLocation")
 	
 end
 

@@ -8,13 +8,26 @@
 minPlayer = 3
 gameStatus = 0
 
+
+--
+--
+--
+AddRemoteEvent("tpTower", function(playerId, index)
+
+	if Configs.towers[index] and Configs.towers[index].tpTo then
+		local x, y, z = GetPlayerLocation(playerId)
+		SetPlayerLocation(playerId, x, y, Configs.towers[index].tpTo)
+	end
+
+end)
+
 --
 --
 --
 AddRemoteEvent("giveWeapons", function(playerId, index)
 
 	SetPlayerWeapon(playerId, 8, 200, true, 2, false)
-	SetPlayerWeapon(playerId, 21, 100, false, 3, false)
+	SetPlayerWeapon(playerId, 21, 20, false, 3, false)
 
 end)
 
@@ -28,10 +41,13 @@ AddRemoteEvent("searchPlayerWeaponInRange", function(playerId)
 	    local lookPlayer = GetPlayersInRange3D(x, y, z, 100)
 	    for _, otherId in pairs(lookPlayer) do
 	    	if otherId ~= playerId and Players[otherId] and Players[otherId].role == "prisoner" then
+	    		SetPlayerAnimation(playerId, "PICKUP_MIDDLE")
 				SetPlayerWeapon(otherId, 1, 0, true, 1)
 				EquipPlayerWeaponSlot(otherId, 0)
 				SetPlayerWeapon(otherId, 1, 0, false, 2)
 				SetPlayerWeapon(otherId, 1, 0, false, 3)
+				SetPlayerAnimation(otherId, "SHRUG")
+				break
 	    	end
 	    end
 	end
@@ -49,6 +65,7 @@ function StartGame()
 	StartPlayersLocation()
 	AddPlayerChatAll('<span color="#eeeeeeaa">Que le jeu commence !</>')
 	gameStatus = 2
+	blockAStatus = false
 
 end
 
@@ -82,7 +99,7 @@ end
 function EndGame()
 
 	ResetRoles()
-	ResetDoors()
+	ResetGameDoors()
 
 	for _, playerId in pairs(GetAllPlayers()) do
 
@@ -94,7 +111,9 @@ function EndGame()
 			SetPlayerWeapon(playerId, 1, 0, true, 1)
 			EquipPlayerWeaponSlot(playerId, 0)
 			SetPlayerWeapon(playerId, 1, 0, false, 2)
-			SetPlayerWeapon(playerId, 1, 0, false, 3)		
+			SetPlayerWeapon(playerId, 1, 0, false, 3)
+			SetPlayerDimension(playerId, 0)			
+			SetPlayerVoiceDimension(playerId, 0)
 
 			Delay(1000, function()
 				SetPlayerHealth(playerId, 0)
@@ -218,52 +237,187 @@ if Configs.debug == true then
 	--
 	--
 	AddCommand("delete", function()
-		DeleteDoors()
+		DeleteGameDoors()
 	end)
 
 	--
 	--
 	--
 	AddCommand("door", function()
-		CreateDoors()
+		CreateGameDoors()
 	end)
 
-	AddCommand("test", function()
-		-- GenerateLoot()
-
-
-		local draw = Random(1, 1)
-		if Configs.jails[draw] and Configs.jails[draw].loot then
-			print(Configs.jails[draw].loot.x)
+	--
+	--
+	--
+	AddCommand("spec", function(player, disable)
+		local _disable = false
+		if disable ~= nil then
+			_disable = true
 		end
-
-		local totalLoot = #Roles.prisoner
-		local needLoot = 0
-		if totalLoot < 5 then
-			needLoot = 1
-		else 
-			for i = 1, totalLoot do
-				if i % 3 == 0 then
-					needLoot = needLoot + 1
-				end
-			end
-		end
-
-		-- Set to false
-		for index, _ in pairs(Configs.jails) do
-			if Configs.jails[index].loot then
-				Configs.jails[index].loot.weapons = false
-			end
-		end
-
-		local currentLoot = 1
-		while currentLoot <= needLoot do
-			local draw = Random(1, 1)
-			print("draw : " .. draw .. " of " .. totalLoot)
-			--print(Configs.jails[draw])
-			currentLoot = currentLoot + 1
-		end
-
+		_disable = not _disable
+		SetPlayerSpectate(player, _disable)
 	end)
+
+	--
+	--
+	--
+	AddCommand("dim", function(playerId, dim)
+		SetPlayerDimension(playerId, tonumber(dim))
+		SetPlayerVoiceDimension(playerId, tonumber(dim))
+	end)
+
+	Anims = {
+		"COMBINE",
+		"PICKUP_LOWER",
+		"PICKUP_MIDDLE",
+		"PICKUP_UPPER",
+		"HANDSHEAD_KNEEL",
+		"HANDSHEAD_STAND",
+		"HANDSUP_KNEEL",
+		"HANDSUP_STAND",
+		"ENTERCODE",
+		"VOMIT",
+		"CROSSARMS",
+		"DABSAREGAY",
+		"DONTKNOW",
+		"DUSTOFF",
+		"FACEPALM",
+		"IDONTLISTEN",
+		"FLEXX",
+		"HALTSTOP",
+		"INEAR_COMM",
+		"ITSJUSTRIGHT",
+		"FALLONKNEES",
+		"KUNGFU",
+		"CALLME",
+		"SALUTE",
+		"SHOOSH",
+		"SLAPOWNASS",
+		"SLAPOWNASS2",
+		"THROATSLIT",
+		"THUMBSUP",
+		"WAVE3",
+		"WIPEOFFSWEAT",
+		"KICKDOOR",
+		"LOCKDOOR",
+		"CRAZYMAN",
+		"DARKSOULS",
+		"SMOKING",
+		"CLAP",
+		"SIT01",
+		"SIT02",
+		"SIT03",
+		"SIT04",
+		"SIT05",
+		"SIT06",
+		"SIT07",
+		"LAY01",
+		"LAY02",
+		"LAY03",
+		"LAY04",
+		"LAY05",
+		"LAY06",
+		"LAY07",
+		"LAY08",
+		"LAY09",
+		"LAY10",
+		"LAY11",
+		"LAY12",
+		"LAY13",
+		"LAY14",
+		"LAY15",
+		"LAY16",
+		"LAY17",
+		"LAY18",
+		"WAVE",
+		"WAVE2",
+		"STRETCH",
+		"BOW",
+		"CALL_GUARDS",
+		"CALL_SOMEONE",
+		"CALL_SOMEONE2",
+		"CHECK_EQUIPMENT",
+		"CHECK_EQUIPMENT2",
+		"CHECK_EQUIPMENT3",
+		"CLAP2",
+		"CLAP3",
+		"CHEER",
+		"DRUNK",
+		"FIX_STUFF",
+		"GET_HERE",
+		"GET_HERE2",
+		"GOAWAY",
+		"LAUGH",
+		"SALUTE2",
+		"THINKING",
+		"THROW",
+		"TRIUMPH",
+		"WASH_WINDOWS",
+		"WATCHING",
+		"DANCE01",
+		"DANCE02",
+		"DANCE03",
+		"DANCE04",
+		"DANCE05",
+		"DANCE06",
+		"DANCE07",
+		"DANCE08",
+		"DANCE09",
+		"DANCE10",
+		"DANCE11",
+		"DANCE12",
+		"DANCE13",
+		"DANCE14",
+		"DANCE15",
+		"DANCE16",
+		"DANCE17",
+		"DANCE18",
+		"DANCE19",
+		"DANCE20",
+		"CUFF",
+		"CUFF2",
+		"REVIVE",
+		"PICKAXE_SWING",
+		"CROSSARMS2",
+		"BARCLEAN01",
+		"BARCLEAN02",
+		"PHONE_PUTAWAY",
+		"PHONE_TAKEOUT",
+		"PHONE_TALKING01",
+		"PHONE_TALKING02",
+		"PHONE_TALKING03",
+		"DRINKING",
+		"SHRUG",
+		"SMOKING01",
+		"SMOKING02",
+		"SMOKING03",
+		"THINKING01",
+		"WALLLEAN01",
+		"WALLLEAN02",
+		"WALLLEAN03",
+		"WALLLEAN04",
+		"YAWN",
+		"FISHING",
+		"PHONE_TAKEOUT_HOLD",
+		"PHONE_HOLD",
+		"SHOUT01",
+		"CART_IDLE",
+		"CARRY_IDLE",
+		"CARRY_SETDOWN",
+		"CARRY_SHOULDER_IDLE",
+		"CARRY_SHOULDER_SETDOWN",
+		"HANDSHAKE",
+		"PUSHUP_START",
+		"PUSHUP_IDLE",
+		"PUSHUP_END",
+		"SLAP01",
+		"SLAP01_REACT ",
+	}
+	
+	AddCommand("a", function(playerId, anim)
+		SetPlayerAnimation(playerId, Anims[tonumber(anim)])
+	end)
+
 
 end

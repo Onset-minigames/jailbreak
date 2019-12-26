@@ -10,6 +10,8 @@
 --
 function GenerateJailLoot()
 
+	print("start GenerateLoot")
+
 	local totalLoot = #Roles.prisoner
 	local needLoot = 0
 	if totalLoot < 5 then
@@ -40,6 +42,9 @@ function GenerateJailLoot()
 		print("GenerateJailLoot boucle")
 	end
 
+
+	print("end GenerateLoot")
+
 end
 
 
@@ -48,12 +53,15 @@ end
 --
 AddRemoteEvent("getJailLoot", function(playerId, index)
 
-	if Configs.jails[index].loot and Configs.jails[index].loot.weapons and Configs.jails[index].loot.weapons == true then
-		SetPlayerAnimation(playerId, "PICKUP_LOWER")
-		Configs.jails[index].loot.weapons = false
-		SetPlayerWeapon(playerId, 3, Random(5, 20), false, 3, false)
-	else
-		SetPlayerAnimation(playerId, "DONTKNOW")
+	local dimension = GetPlayerDimension(playerId)
+	if dimension == 1 then
+		if Configs.jails[index].loot and Configs.jails[index].loot.weapons and Configs.jails[index].loot.weapons == true then
+			SetPlayerAnimation(playerId, "PICKUP_LOWER")
+			Configs.jails[index].loot.weapons = false
+			SetPlayerWeapon(playerId, 3, Random(5, 20), false, 3, false)
+		else
+			SetPlayerAnimation(playerId, "DONTKNOW")
+		end
 	end
 
 end)
@@ -63,6 +71,8 @@ end)
 --
 --
 function GenerateLoot()
+
+	print("start GenerateLoot")
 
 	for index, _ in pairs(Configs.loot) do
 		
@@ -74,6 +84,8 @@ function GenerateLoot()
 		end
 	end
 
+	print("end GenerateLoot")
+
 end
 
 --
@@ -81,13 +93,15 @@ end
 --
 AddRemoteEvent("getLoot", function(playerId, index)
 
-	print(index)
-	if Configs.loot[index] and Configs.loot[index].weapons and Configs.loot[index].weapons == true then
-		SetPlayerAnimation(playerId, "PICKUP_MIDDLE")
-		Configs.loot[index].weapons = false
-		SetPlayerWeapon(playerId, 3, Random(5, 20), false, 3, false)
-	else
-		SetPlayerAnimation(playerId, "DONTKNOW")
+	local dimension = GetPlayerDimension(playerId)
+	if dimension == 1 then
+		if Configs.loot[index] and Configs.loot[index].weapons and Configs.loot[index].weapons == true then
+			SetPlayerAnimation(playerId, "PICKUP_MIDDLE")
+			Configs.loot[index].weapons = false
+			SetPlayerWeapon(playerId, 3, Random(5, 20), false, 3, false)
+		else
+			SetPlayerAnimation(playerId, "DONTKNOW")
+		end
 	end
 
 end)

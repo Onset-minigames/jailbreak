@@ -22,6 +22,8 @@ end
 --
 function SetRole()
 
+	print("SetRole start")
+
 	-- Prisoner
 	for _, playerId in pairs(GetAllPlayers()) do
 		if Players[playerId] then
@@ -56,6 +58,9 @@ function SetRole()
 			end
 		end
 	end
+
+
+	print("SetRole end")
 
 	-- TODO : DETERMINER LE CHEF DES GARDIENS
 	-- print("\n" .. Roles.guardian[Random(1, currentGuardian)] .. " est le chef")

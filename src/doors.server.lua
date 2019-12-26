@@ -5,12 +5,13 @@
 -- @Source: https://github.com/Onset-minigames
 --
 
-Doors = {}
+GameDoors = {}
+LobbyDoors = {}
 
 AddEvent("OnPlayerInteractDoor", function(playerId, door, bWantsOpen)
 
-	if Doors[door] then
-		if not Doors[door].jail and not Doors[door].guardian then
+	if GameDoors[door] then
+		if not GameDoors[door].jail and not GameDoors[door].guardian then
 			SetDoorOpen(door, not IsDoorOpen(door))
 		elseif Players[playerId] and Players[playerId].role and Players[playerId].role == "guardian" then
 			SetDoorOpen(door, not IsDoorOpen(door))
@@ -23,7 +24,7 @@ end)
 --
 --
 function ToogleDoorsGroup(name)
-	for index, value in ipairs(Doors) do
+	for index, value in ipairs(GameDoors) do
 		if value.group and value.group == name then
 			SetDoorOpen(index, not IsDoorOpen(index))
 		end
@@ -33,11 +34,23 @@ end
 --
 --
 --
-function CreateDoors()
+function SetDoorsGroup(name, status)
+	for index, value in ipairs(GameDoors) do
+		if value.group and value.group == name then
+			SetDoorOpen(index, status)
+		end
+	end
+end
 
-	for _, value in ipairs(Configs.doors) do
+--
+--
+--
+function CreateLobbyDoors()
+
+	for _, value in ipairs(Configs.LobbyDoors) do
 		local id = CreateDoor(value.type, value.x, value.y, value.z, value.rotation, value.interact)
-		Doors[id] = value
+		SetDoorDimension(id, 0)
+		LobbyDoors[id] = value
 	end
 
 end
@@ -45,9 +58,9 @@ end
 --
 --
 --
-function DeleteDoors()
+function DeleteLobbyDoors()
 
-	for index, _ in ipairs(Doors) do
+	for index, _ in ipairs(LobbyDoors) do
 		DestroyDoor(index)
 	end
 
@@ -56,22 +69,61 @@ end
 --
 --
 --
-function ResetDoors()
+function CreateGameDoors()
 
-	DeleteDoors()
-	CreateDoors()
+	for _, value in ipairs(Configs.LobbyDoors) do
+		local id = CreateDoor(value.type, value.x, value.y, value.z, value.rotation, value.interact)
+		SetDoorDimension(id, 1)
+		GameDoors[id] = value
+	end
+
+	for _, value in ipairs(Configs.gameDoors) do
+		local id = CreateDoor(value.type, value.x, value.y, value.z, value.rotation, value.interact)
+		SetDoorDimension(id, 1)
+		GameDoors[id] = value
+	end
 
 end
 
 --
 --
 --
-AddRemoteEvent("controlInteract", function(playerid, groupName)
+function DeleteGameDoors()
 
-	SetPlayerAnimation(playerid, "ENTERCODE")
-	Delay(2500, function()
-		ToogleDoorsGroup(groupName)
-	end)
+	for index, _ in ipairs(GameDoors) do
+		DestroyDoor(index)
+	end
+
+end
+
+--
+--
+--
+function ResetGameDoors()
+
+	DeleteGameDoors()
+	CreateGameDoors()
+
+end
+
+--
+--
+--
+blockAStatus = false
+AddRemoteEvent("controlInteract", function(playerId, groupName)
+
+	local dimension = GetPlayerDimension(playerId)
+	if dimension == 1 then
+		SetPlayerAnimation(playerId, "ENTERCODE")
+		Delay(2500, function()
+			if groupName == "blockA" then
+				blockAStatus = not blockAStatus
+				SetDoorsGroup(groupName, blockAStatus)
+			else
+				ToogleDoorsGroup(groupName)
+			end
+		end)
+	end
 
 end)
 
