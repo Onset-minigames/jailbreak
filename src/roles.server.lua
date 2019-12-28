@@ -68,28 +68,33 @@ function SetRole()
 		end
 	end
 
-	print(GetPrisonerCount())
-	print("SetRole 2")
+	print("SetRole 2", needGuardian, GetPrisonerCount())
 
 	local guardians = {}
-	local currentGuardian = 1
-	while currentGuardian <= needGuardian do
+	local currentGuardian = 0
+	while currentGuardian < needGuardian do
 		local draw = Random(1, totalPrisoner)
-		if prisoners[draw] then
+		if prisoners[draw] and currentGuardian < needGuardian then
 			local playerId = prisoners[draw]
 			if Players[playerId] then
 				table.insert(guardians, playerId)
 				prisoners[draw] = nil
 				Players[playerId].role = "guardian"
 				currentGuardian = currentGuardian + 1
+				print("Add " .. playerId .. " to guardian")
 			end
 		end
 	end
 
+	print("SetRole chief")
+
+	-- DETERMINER LE CHEF DES GARDIENS
+	local chief = Random(1, currentGuardian)
+	if guardians[chief] then
+		local playerId = guardians[chief]
+		Players[playerId].chief = true
+	end
+
 	print("SetRole end")
-
-	-- TODO : DETERMINER LE CHEF DES GARDIENS
-	-- print("\n" .. guardian[Random(1, currentGuardian)] .. " est le chef")
-
 
 end

@@ -48,20 +48,25 @@ function StartPlayersLocation()
 
 				local jail = Jails[playerId]
 				local jailLocation = Configs.jails[jail]
-				--SetPlayerLocation(playerId, jailLocation.spawn.x, jailLocation.spawn.y, jailLocation.spawn.z + 100)
+				SetPlayerLocation(playerId, jailLocation.spawn.x, jailLocation.spawn.y, jailLocation.spawn.z + 100)
 
 			elseif "guardian" == data.role then
 
-				--SetPlayerLocation(playerId, Configs.guardians.spawn.x, Configs.guardians.spawn.y, Configs.guardians.spawn.z + 100)
+				SetPlayerLocation(playerId, Configs.guardians.spawn.x, Configs.guardians.spawn.y, Configs.guardians.spawn.z + 100)
 
 			end
 
-			ChangeClothing(playerId, data.role)
+			ChangeClothingRole(playerId, data.role)
 			CallRemoteEvent(playerId, "SetRole", data.role)
 			SetPlayerRespawnTime(playerId, 60 * 60 * 1000) -- 1 heure
 			SetPlayerDimension(playerId, 1)
 			SetPlayerVoiceDimension(playerId, 1)
 			SetPlayerHealth(playerId, 100)
+			StartAntiAfk(playerId)
+
+			if Players[playerId].chief then
+				ChangeClothing(playerId, "clothing0", "/Game/CharacterModels/SkeletalMesh/Outfits/HZN_Outfit_Police_Hat_LPR")
+			end
 
 		end
 
@@ -135,7 +140,8 @@ AddEvent("OnPlayerQuit", function(playerId)
 
 	-- Remove player
 	if Players[playerId] then
-		Players[playerId] = nil	
+		Players[playerId] = nil
+		StopAntiAfk(playerId)
 	end
 
 	AddPlayerChatAll('<span color="#eeeeeeaa">' .. GetPlayerName(playerId) .. ' (' .. playerId .. ') leave the server</>')
@@ -152,6 +158,8 @@ AddEvent('OnPlayerDeath', function(playerId, instigator)
 		local role = Players[playerId].role
 		Players[playerId].role = nil
 		SetPlayerSpectate(playerId, true)
+		SetPlayerVoiceEnabled(playerId, false)
+		StopAntiAfk(playerId)
 	end
 
 end)
@@ -173,14 +181,13 @@ AddEvent("OnPlayerWeaponShot", function(playerId, weapon, hittype, otherPlayerId
 	if otherPlayerId ~= 0 and weapon == 21 and hittype == HIT_PLAYER then
 		if Players[otherPlayerId].ragdoll == false or Players[otherPlayerId].ragdoll == nil then
 			Players[otherPlayerId].ragdoll = true
-			-- local x, y, z = GetPlayerLocation(otherPlayerId) -- Tempo fix
-			-- EquipPlayerWeaponSlot(otherPlayerId, 0) -- Tempo fix
 			SetPlayerAnimation(otherPlayerId, "LAY01")
 			SetPlayerRagdoll(otherPlayerId, true)
 			Delay(10000, function()
+				if GetPlayerHealth(otherPlayerId) > 0 then					
+					SetPlayerRagdoll(otherPlayerId, false)
+				end
 				SetPlayerAnimation(otherPlayerId, "STOP")
-				SetPlayerRagdoll(otherPlayerId, false)
-				-- SetPlayerLocation(otherPlayerId, x, y, z, 0.0) -- Tempo fix
 				Players[otherPlayerId].ragdoll = false
 			end)
 		end
@@ -208,8 +215,58 @@ end)
 --
 AddRemoteEvent("OnPlayerReady", function(playerId)
 
-	ChangeClothing(playerId, "prisoner")
+	ChangeClothingRole(playerId, "prisoner")
 	ChangeOtherPlayerClothes(playerId)
-	Players[playerId].ready = true
+	if not Players[playerId].ready then
+		Players[playerId].ready = true
+	end
+
+end)
+
+--
+--
+--
+AddRemoteEvent("searchPlayerWeaponInRange", function(playerId)
+
+	if Players[playerId] and Players[playerId].role and Players[playerId].role == "guardian" then
+		local x, y, z = GetPlayerLocation(playerId)
+	    local lookPlayer = GetPlayersInRange3D(x, y, z, 100)
+	    for _, otherId in pairs(lookPlayer) do
+			if otherId ~= playerId and Players[otherId] and Players[otherId].role == "prisoner" then
+
+	    		SetPlayerAnimation(playerId, "PICKUP_MIDDLE")
+				local asWeapon = false
+
+				local weaponSlot2 = GetPlayerWeapon(otherId, 2)
+				local weaponSlot3 = GetPlayerWeapon(otherId, 3)
+				local equippedWeapon = GetPlayerEquippedWeapon(otherId)
+				local equippedWeaponSlot = GetPlayerEquippedWeaponSlot(otherId)
+
+				if weaponSlot2 ~= 1 or weaponSlot3 ~= 1 then
+					asWeapon = true
+				end				
+
+				if asWeapon then
+					SetPlayerAnimation(otherId, "SHRUG")
+					EquipPlayerWeaponSlot(otherId, 1)
+					SetPlayerWeapon(otherId, 1, 0, false, 2)
+					SetPlayerWeapon(otherId, 1, 0, false, 3)
+
+					if equippedWeapon ~= 0 then
+						print("Player is weapon equiped : " .. equippedWeapon)
+						Delay(1500, function()
+							print("Force remove weapon " .. equippedWeaponSlot)
+							SetPlayerWeapon(otherId, 1, 0, false, equippedWeaponSlot)
+						end) -- 1,5s
+					end
+
+				else
+					SetPlayerAnimation(otherId, "DONTKNOW")
+				end
+				break
+
+	    	end
+	    end
+	end
 
 end)

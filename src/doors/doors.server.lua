@@ -125,4 +125,3 @@ AddRemoteEvent("controlInteract", function(playerId, groupName)
 	end
 
 end)
-

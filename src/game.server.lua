@@ -26,73 +26,82 @@ end)
 --
 AddRemoteEvent("giveWeapons", function(playerId, index)
 
-	SetPlayerWeapon(playerId, 8, 200, true, 2, false)
-	SetPlayerWeapon(playerId, 21, 20, false, 3, false)
-
-end)
-
---
---
---
-AddRemoteEvent("searchPlayerWeaponInRange", function(playerId)
-
-	if Players[playerId] and Players[playerId].role and Players[playerId].role == "guardian" then
-		local x, y, z = GetPlayerLocation(playerId)
-	    local lookPlayer = GetPlayersInRange3D(x, y, z, 100)
-	    for _, otherId in pairs(lookPlayer) do
-	    	if otherId ~= playerId and Players[otherId] and Players[otherId].role == "prisoner" then
-	    		SetPlayerAnimation(playerId, "PICKUP_MIDDLE")
-				SetPlayerWeapon(otherId, 1, 0, true, 1)
-				EquipPlayerWeaponSlot(otherId, 0)
-				SetPlayerWeapon(otherId, 1, 0, false, 2)
-				SetPlayerWeapon(otherId, 1, 0, false, 3)
-				SetPlayerAnimation(otherId, "SHRUG")
-				break
-	    	end
-	    end
+	local dimension = GetPlayerDimension(playerId)
+	if dimension == 1 then
+		SetPlayerWeapon(playerId, 8, 200, true, 2, false)
+		SetPlayerWeapon(playerId, 21, 20, false, 3, false)
 	end
 
 end)
 
 --
+-- Onpen all jails doors after 5 minutes
+--
+gameTimer = {}
+function StartGameTimer()
+
+	print("start StartGameTimer")
+	local count = 1
+	gameTimer = CreateCountTimer(function()
+
+		if 1 == count then
+			SetDoorsGroup("blockA", true)
+			SetDoorsGroup("blockB", true)
+			SetDoorsGroup("blockC", true)
+			SetDoorsGroup("blockD", true)
+		elseif 2 == count then
+			AddPlayerChatAll("Il reste plus que 5 minutes avant la fin de la game !")
+		elseif 3 == count then
+			gameStatus = 4
+		end
+		count = count + 1
+		
+	end, 5 * 60000, 3) -- 5 minutes
+
+end
+
 --
 --
-function StartGame() 
+--
+function StoptGameTimer()
+
+	DestroyTimer(gameTimer)
+
+end
+
+--
+--
+--
+function StartGame()
 
 	SetRole()
 	GenerateLoot()
 	GenerateJailLoot()
 	StartPlayersLocation()
+	StartGameTimer()
 	AddPlayerChatAll('<span color="#eeeeeeaa">Que le jeu commence !</>')
 	gameStatus = 2
 	blockAStatus = false
 
 end
 
-AddCommand("debug", function(playerId)
-	print(GetPlayerReadyCount(), GetPlayerCount())
-end)
-
 --
 --
 --
-local CheckTimer = nil
 function RunTimer()
 	
-	CheckTimer = CreateTimer(function()
+	CreateTimer(function()
 
 		if GetPlayerReadyCount() >= minPlayer and gameStatus == 0 then
 			gameStatus = 1
 			StartGame()
-		elseif (GetPrisonerCount() == 0 or GetGuardianCount() == 0) and gameStatus == 2 then
+		elseif (GetPrisonerCount() == 0 or GetGuardianCount() == 0) and 2 == gameStatus or 4 == gameStatus then
 			gameStatus = 3
 			AddPlayerChatAll('<span color="#eeeeeeaa">Fin du jeu, GG à tous !</>')
 			EndGame()
 			Delay(10000, function() -- Pause de 10s
 				gameStatus = 0
 			end)
-		elseif gameStatus == 2 then
-			print("prisoner : " .. GetPrisonerCount(), "guardian : " .. GetGuardianCount())
 		end
 
 	end, 1000)
@@ -104,6 +113,7 @@ end
 --
 function EndGame()
 
+	StoptGameTimer()
 	ResetGameDoors()
 
 	for _, playerId in pairs(GetAllPlayers()) do
@@ -111,18 +121,23 @@ function EndGame()
 		if Players[playerId] then
 			-- Remove role
 			Players[playerId].role = nil
+			if Players[playerId].chief then
+				Players[playerId].chief = nil
+				ChangeClothing(playerId, "clothing0", nil)
+			end
 
 			-- Remove All weapons
 			SetPlayerWeapon(playerId, 1, 0, true, 1)
-			EquipPlayerWeaponSlot(playerId, 0)
+			EquipPlayerWeaponSlot(playerId, 1)
 			SetPlayerWeapon(playerId, 1, 0, false, 2)
 			SetPlayerWeapon(playerId, 1, 0, false, 3)
 			SetPlayerDimension(playerId, 0)			
 			SetPlayerVoiceDimension(playerId, 0)
+			SetPlayerVoiceEnabled(playerId, true)
 
-			Delay(1000, function()
+			Delay(1000, function()  -- 1s
 				SetPlayerHealth(playerId, 0)
-				SetPlayerRespawnTime(playerId, 1000) -- 1s
+				SetPlayerRespawnTime(playerId, 1000)
 			end)
 		end
 
