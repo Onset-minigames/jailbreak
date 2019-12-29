@@ -12,13 +12,13 @@ Players = {}
 -- Spawn jail or administration
 --
 function StartPlayersLocation()
-	
+
 	print("start StartPlayersLocation")
-	
+
 	local Jails = {}
 	local jailIndex = 1
 	local prisoners = {}
-	
+
 	-- Copy
 	for playerId, data in pairs(Players) do
 		if data.ready and data.role and "prisoner" == data.role then
@@ -26,7 +26,12 @@ function StartPlayersLocation()
 		end
 	end
 	local totalPrisoner = #prisoners
-	
+
+	-- Fix infinite loop
+	if totalPrisoner == 0 then
+		return false
+	end
+
 	print("start while")
 	while jailIndex <= totalPrisoner do
 		local draw = Random(1, totalPrisoner)

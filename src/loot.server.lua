@@ -26,6 +26,11 @@ function GenerateJailLoot()
 		end
 	end
 
+	-- Fix infinite loop
+	if totalLoot == 0 then
+		return false
+	end
+
 	print("GenerateJailLoot 1")
 	-- Set to false
 	for index, _ in pairs(Configs.jails) do

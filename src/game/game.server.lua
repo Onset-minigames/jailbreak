@@ -37,8 +37,12 @@ end)
 --
 -- Onpen all jails doors after 5 minutes
 --
-gameTimer = {}
+gameTimer = nil
 function StartGameTimer()
+
+	if gameTimer then
+		DestroyTimer(gameTimer)
+	end
 
 	print("start StartGameTimer")
 	local count = 1
@@ -65,7 +69,10 @@ end
 --
 function StoptGameTimer()
 
-	DestroyTimer(gameTimer)
+	if gameTimer then
+		DestroyTimer(gameTimer)
+		gameTimer = nil
+	end
 
 end
 
@@ -74,6 +81,7 @@ end
 --
 function StartGame()
 
+	print("Start StartGame")
 	SetRole()
 	GenerateLoot()
 	GenerateJailLoot()
@@ -82,6 +90,7 @@ function StartGame()
 	AddPlayerChatAll('<span color="#eeeeeeaa">Que le jeu commence !</>')
 	gameStatus = 2
 	blockAStatus = false
+	print("End StartGame")
 
 end
 
@@ -113,6 +122,7 @@ end
 --
 function EndGame()
 
+	print("Start EndGame")
 	StoptGameTimer()
 	ResetGameDoors()
 
@@ -142,5 +152,7 @@ function EndGame()
 		end
 
 	end
+	
+	print("End EndGame")
 
 end

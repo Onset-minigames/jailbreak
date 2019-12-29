@@ -68,6 +68,11 @@ function SetRole()
 		end
 	end
 
+	-- Fix infinite Random
+	if totalPrisoner == 0 then
+		return false
+	end
+
 	print("SetRole 2", needGuardian, GetPrisonerCount())
 
 	local guardians = {}
@@ -87,6 +92,11 @@ function SetRole()
 	end
 
 	print("SetRole chief")
+
+	-- Fix infinite Random
+	if currentGuardian == 0 then
+		return false
+	end
 
 	-- DETERMINER LE CHEF DES GARDIENS
 	local chief = Random(1, currentGuardian)

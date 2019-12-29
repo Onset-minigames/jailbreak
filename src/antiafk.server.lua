@@ -51,6 +51,7 @@ function StopAntiAfk(playerId)
 
     if antiAfkTimers[playerId] then
         DestroyTimer(antiAfkTimers[playerId])
+        antiAfkTimers[playerId] = nil
     end
 
 end
