@@ -13,8 +13,6 @@ Players = {}
 --
 function StartPlayersLocation()
 
-	print("start StartPlayersLocation")
-
 	local Jails = {}
 	local jailIndex = 1
 	local prisoners = {}
@@ -32,7 +30,6 @@ function StartPlayersLocation()
 		return false
 	end
 
-	print("start while")
 	while jailIndex <= totalPrisoner do
 		local draw = Random(1, totalPrisoner)
 		if prisoners[draw] then
@@ -42,7 +39,6 @@ function StartPlayersLocation()
 			jailIndex = jailIndex + 1
 		end
 	end
-	print("end while")
 	
 	-- tp prisoner
 	for playerId, data in pairs(Players) do
@@ -54,11 +50,20 @@ function StartPlayersLocation()
 				local jail = Jails[playerId]
 				local jailLocation = Configs.jails[jail]
 				SetPlayerLocation(playerId, jailLocation.spawn.x, jailLocation.spawn.y, jailLocation.spawn.z + 100)
-				
+
+				-- RULES
+				AddPlayerChat(playerId, '<span color="#e74c3c">[SERVEUR] Vous êtes <strong>prisonnier</strong>, votre rôle est de suivre les ordres ou de vous rebeller. Vous devez tuer tous les gradients, faite le de manière organiser et intelligente !</>')
+				AddPlayerChat(playerId, '<span color="#e74c3c">[SERVEUR] Vous pouvez trouver des armes dans votre cellule ou en fouillant dans les poubelles (touche E).</>')
+
 			elseif "guardian" == data.role then
 				
 				SetPlayerLocation(playerId, Configs.guardians.spawn.x, Configs.guardians.spawn.y, Configs.guardians.spawn.z + 100)
-				
+
+				-- Rules
+				AddPlayerChat(playerId, '<span color="#e74c3c">[SERVEUR] Vous êtes <strong>gardien</strong>, votre rôle est de faire respecter les ordres du chef (personne avec le chapeau) et de maintenir l\'ordre en tuent les prisonniers rebelles !</>')
+				AddPlayerChat(playerId, '<span color="#e74c3c">[SERVEUR] Demander aux prisonniers de faire des choses, si le prisonnier ne parviens pas a faire ce qui est demander il est possible de le tuer. Vous pouvez utiliser la touche F pour fouiller !</>')
+				AddPlayerChat(playerId, '<span color="#e74c3c">[SERVEUR] Rester fairplay ! N\'oubliez pas que si vous touez une personne, celle-ci devra attendre la fin du jeu.</>')
+
 				-- Waypoint armory
 				CallRemoteEvent( playerId, "AddWaypoint", "armory", Configs.guardians.waypoints.armory)
 				
@@ -103,9 +108,7 @@ function StartPlayersLocation()
 		end
 		
 	end
-	
-	print("end StartPlayersLocation")
-	
+
 end
 
 --
@@ -157,12 +160,15 @@ end)
 -- Player join
 --
 AddEvent("OnPlayerJoin", function(playerId)
-	
+
 	-- Init player
 	Players[playerId] = {}
 	SetSpawnPlayer(playerId)
-	AddPlayerChatAll('<span color="#eeeeeeaa">' .. GetPlayerName(playerId) .. ' (' .. playerId .. ') joined the server</>')
-	
+	AddPlayerChatAll('<span color="#eeeeeeaa">' .. GetPlayerName(playerId) .. ' (' .. playerId .. ') rejoint le serveur.</>')
+	if gameStatus ~= 0 then
+		AddPlayerChat(playerId, '<span color="#e74c3c">[SERVEUR] La partie est déjà en cours, il faut attendre quelques minutes dans le lobby !</>')
+	end
+
 end)
 
 --
@@ -176,7 +182,7 @@ AddEvent("OnPlayerQuit", function(playerId)
 		StopAntiAfk(playerId)
 	end
 	
-	AddPlayerChatAll('<span color="#eeeeeeaa">' .. GetPlayerName(playerId) .. ' (' .. playerId .. ') leave the server</>')
+	AddPlayerChatAll('<span color="#eeeeeeaa">' .. GetPlayerName(playerId) .. ' (' .. playerId .. ') quitter le serveur.</>')
 	
 end)
 
@@ -184,7 +190,7 @@ end)
 --
 --
 AddEvent('OnPlayerDeath', function(playerId, instigator)
-	
+
 	-- Remove player on team
 	if Players[playerId] and Players[playerId].role then
 		local role = Players[playerId].role
@@ -192,8 +198,9 @@ AddEvent('OnPlayerDeath', function(playerId, instigator)
 		SetPlayerSpectate(playerId, true)
 		SetPlayerVoiceEnabled(playerId, false)
 		StopAntiAfk(playerId)
+		AddPlayerChat(playerId, '<span color="#e74c3c">[SERVEUR] Vous êtes mort  ! Le mode spectateur est en QUERTY, pour avancer utiliser la touche W et la sourie !</span>')
 	end
-	
+
 end)
 
 --
@@ -235,7 +242,6 @@ end)
 AddEvent("OnPlayerDamage", function(playerId, damageType, amount)
 	
 	if damageType == 4 and amount > 60 then
-		print(playerId, damagetype, amount)
 		SetPlayerHealth(playerId, 0)
 	end
 	
@@ -285,9 +291,7 @@ AddRemoteEvent("SearchPlayerWeaponInRange", function(playerId)
 					SetPlayerWeapon(otherId, 1, 0, false, 3)
 					
 					if equippedWeapon ~= 0 then
-						print("Player is weapon equiped : " .. equippedWeapon)
 						Delay(1500, function()
-							print("Force remove weapon " .. equippedWeaponSlot)
 							SetPlayerWeapon(otherId, 1, 0, false, equippedWeaponSlot)
 						end) -- 1,5s
 					end

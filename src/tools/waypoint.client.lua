@@ -21,7 +21,9 @@ end
 --
 function RemoveWaypoint(name)
 
-    DestroyWaypoint(Waypoints[name])
+    if Waypoints[name] then
+        DestroyWaypoint(Waypoints[name])
+    end
 
 end
 

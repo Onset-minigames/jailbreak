@@ -6,6 +6,6 @@
 --
 
 AddEvent("OnPlayerChat", function(playerId, text)
-	AddPlayerChatAll("<span color=\"#ffffffFF\">" .. GetPlayerName(playerId) .." : " .. text .. "</>")
+	AddPlayerChatAll('<span color="##ecf0f1">" .. GetPlayerName(playerId) .." : " .. text .. "</>')
 	return false
 end)

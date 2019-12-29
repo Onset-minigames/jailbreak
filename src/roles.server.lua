@@ -41,19 +41,14 @@ end
 --
 function SetRole()
 
-	print("SetRole start")
-
 	-- Prisoner
 	local prisoners = {}
 	for playerId, data in pairs(Players) do
 		if data.ready then
 			table.insert(prisoners, playerId)
 			data.role = "prisoner"
-			print("Set player " .. playerId .. " to prisoner")
 		end
 	end
-
-	print("SetRole 1")
 
 	-- Guardian
 	local totalPrisoner = GetPrisonerCount()
@@ -73,8 +68,6 @@ function SetRole()
 		return false
 	end
 
-	print("SetRole 2", needGuardian, GetPrisonerCount())
-
 	local guardians = {}
 	local currentGuardian = 0
 	while currentGuardian < needGuardian do
@@ -86,12 +79,9 @@ function SetRole()
 				prisoners[draw] = nil
 				Players[playerId].role = "guardian"
 				currentGuardian = currentGuardian + 1
-				print("Add " .. playerId .. " to guardian")
 			end
 		end
 	end
-
-	print("SetRole chief")
 
 	-- Fix infinite Random
 	if currentGuardian == 0 then
@@ -104,7 +94,5 @@ function SetRole()
 		local playerId = guardians[chief]
 		Players[playerId].chief = true
 	end
-
-	print("SetRole end")
 
 end

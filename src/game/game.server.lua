@@ -24,12 +24,21 @@ end)
 --
 --
 --
-AddRemoteEvent("GiveWeapons", function(playerId, index)
+function GiveWeapons(playerId)
 
-	local dimension = GetPlayerDimension(playerId)
-	if dimension == 1 then
+	SetPlayerWeapon(playerId, 8, 200, true, 2, false)
+	SetPlayerWeapon(playerId, 21, 5, false, 3, false)
+
+end
+
+--
+--
+--
+AddRemoteEvent("GiveWeapons", function(playerId)
+
+	if 1 == GetPlayerDimension(playerId) then
 		SetPlayerWeapon(playerId, 8, 200, true, 2, false)
-		SetPlayerWeapon(playerId, 21, 20, false, 3, false)
+		SetPlayerWeapon(playerId, 21, 5, false, 3, false)
 	end
 
 end)
@@ -44,23 +53,36 @@ function StartGameTimer()
 		DestroyTimer(gameTimer)
 	end
 
-	print("start StartGameTimer")
-	local count = 1
+	local count = 0
 	gameTimer = CreateCountTimer(function()
 
-		if 1 == count then
+		if 5 == count then
 			SetDoorsGroup("blockA", true)
 			SetDoorsGroup("blockB", true)
 			SetDoorsGroup("blockC", true)
 			SetDoorsGroup("blockD", true)
-		elseif 2 == count then
-			AddPlayerChatAll("Il reste plus que 5 minutes avant la fin de la game !")
-		elseif 3 == count then
+			AddPlayerChatAll('<span color="#e74c3c">[SERVEUR] Ouverture de toutes les celules !</>')
+		elseif 10 == count then
+			AddPlayerChatAll('<span color="#e74c3c">[SERVEUR] Il reste plus que 5 minutes avant la fin de la game !</>')
+		elseif 14 == count then
+			AddPlayerChatAll('<span color="#e74c3c">[SERVEUR] Il reste plus que 1 minute avant la fin de la game !</>')
+		elseif 15 == count then
+
+			AddPlayerChatAll('<span color="#e74c3c">[SERVEUR] La partie est trop longue ! On va arranger ça ;)</>')
+			for playerId, player in pairs(Players) do
+				if player.role then
+					GiveWeapons(playerId)
+					SpawnPlayer(playerId)
+				end
+			end
+			DeleteGameDoors()
+
+		elseif 16 == count then
 			gameStatus = 4
 		end
 		count = count + 1
 
-	end, 5 * 60000, 3) -- 5 minutes
+	end, 1 * 60000, 16) -- 1 minutes
 
 end
 
@@ -81,16 +103,14 @@ end
 --
 function StartGame()
 
-	print("Start StartGame")
 	SetRole()
 	GenerateLoot()
 	GenerateJailLoot()
 	StartPlayersLocation()
 	StartGameTimer()
-	AddPlayerChatAll('<span color="#eeeeeeaa">Que le jeu commence !</>')
+	AddPlayerChatAll('<span color="#e74c3c">[SERVEUR] Que le jeu commence !</>')
 	gameStatus = 2
 	blockAStatus = false
-	print("End StartGame")
 
 end
 
@@ -106,7 +126,7 @@ function RunTimer()
 			StartGame()
 		elseif (GetPrisonerCount() == 0 or GetGuardianCount() == 0) and 2 == gameStatus or 4 == gameStatus then
 			gameStatus = 3
-			AddPlayerChatAll('<span color="#eeeeeeaa">Fin du jeu, GG à tous !</>')
+			AddPlayerChatAll('<span color="#e74c3c">[SERVEUR] Fin du jeu, GG à tous !</>')
 			EndGame()
 			Delay(10000, function() -- Pause de 10s
 				gameStatus = 0
@@ -122,7 +142,6 @@ end
 --
 function EndGame()
 
-	print("Start EndGame")
 	StoptGameTimer()
 	ResetGameDoors()
 
@@ -152,7 +171,5 @@ function EndGame()
 		end
 
 	end
-	
-	print("End EndGame")
 
 end

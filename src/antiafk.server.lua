@@ -12,15 +12,12 @@ antiAfkTimers = {}
 --
 function StartAntiAfk(playerId)
 
-    print("start anti-afk")
-
     if antiAfkTimers[playerId] then
         DestroyTimer(antiAfkTimers[playerId])
     end
 
     antiAfkTimers[playerId] = CreateTimer(function()
 
-        print("check anti-afk")
         local x, y, z = GetPlayerLocation(playerId)
         if Players[playerId].lastLocation.x == x and Players[playerId].lastLocation.y == y then
             SetPlayerHealth(playerId, 0)

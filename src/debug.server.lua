@@ -10,7 +10,6 @@ if Configs.debug == true then
 
 	AddCommand("way", function (playerId)
 
-		print("oui !!");
 		-- Waypoint armory
 		CallRemoteEvent(playerId, "AddWaypoint", "armory", Configs.guardians.waypoints.armory)
 

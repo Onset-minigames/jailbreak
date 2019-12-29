@@ -104,12 +104,12 @@ Configs.gameDoors = {
 	{ type = 7, x = -177108.000000, y = 81660.000000, z = 1430.000000, rotation = -90.0, interact = true }, -- PETITE COUR
 	{ type = 7, x = -176408.000000, y = 80210.000000, z = 1230.000000, rotation = -90.0, interact = true }, -- PETITE COUR BASKET
 
-	{ type = 7, x = -177340.000000, y = 72892.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
-	{ type = 7, x = -177340.000000, y = 72543.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
-	{ type = 7, x = -177340.000000, y = 72192.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
-	{ type = 7, x = -177340.000000, y = 71842.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
-	{ type = 7, x = -177340.000000, y = 71493.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
-	{ type = 7, x = -177340.000000, y = 71143.000000, z = 1230.000000, rotation = 0.0, interact = true, jail = true }, -- OUTSIDE JAIL
+	{ type = 7, x = -177340.000000, y = 72892.000000, z = 1230.000000, rotation = 0.0, interact = true, guardian = true }, -- OUTSIDE JAIL
+	{ type = 7, x = -177340.000000, y = 72543.000000, z = 1230.000000, rotation = 0.0, interact = true, guardian = true }, -- OUTSIDE JAIL
+	{ type = 7, x = -177340.000000, y = 72192.000000, z = 1230.000000, rotation = 0.0, interact = true, guardian = true }, -- OUTSIDE JAIL
+	{ type = 7, x = -177340.000000, y = 71842.000000, z = 1230.000000, rotation = 0.0, interact = true, guardian = true }, -- OUTSIDE JAIL
+	{ type = 7, x = -177340.000000, y = 71493.000000, z = 1230.000000, rotation = 0.0, interact = true, guardian = true }, -- OUTSIDE JAIL
+	{ type = 7, x = -177340.000000, y = 71143.000000, z = 1230.000000, rotation = 0.0, interact = true, guardian = true }, -- OUTSIDE JAIL
 	{ type = 7, x = -176640.000000, y = 71378.000000, z = 1430.000000, rotation = -180.0, interact = true }, -- OUTSIDE JAIL ENTRANCE
 	{ type = 7, x = -176519.109375, y = 73360.859375, z = 1430.000000, rotation = 90.0, interact = true }, -- OUTSIDE JAIL ENTRANCE
 

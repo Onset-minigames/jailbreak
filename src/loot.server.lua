@@ -12,8 +12,6 @@
 --
 function GenerateJailLoot()
 
-	print("start GenerateJailLoot")
-
 	local totalLoot = GetPrisonerCount()
 	local needLoot = 0
 	if totalLoot < 5 then
@@ -31,7 +29,6 @@ function GenerateJailLoot()
 		return false
 	end
 
-	print("GenerateJailLoot 1")
 	-- Set to false
 	for index, _ in pairs(Configs.jails) do
 		if Configs.jails[index].loot then
@@ -39,7 +36,6 @@ function GenerateJailLoot()
 		end
 	end
 
-	print("GenerateJailLoot 2", totalLoot)
 	-- 
 	local currentLoot = 1
 	while currentLoot <= needLoot do
@@ -48,11 +44,7 @@ function GenerateJailLoot()
 			Configs.jails[draw].loot.weapons = true
 			currentLoot = currentLoot + 1
 		end
-		print("GenerateJailLoot boucle")
 	end
-
-
-	print("end GenerateLoot")
 
 end
 
@@ -61,10 +53,8 @@ end
 --
 function GenerateLoot()
 
-	print("start GenerateLoot")
-
 	for index, _ in pairs(Configs.loot) do
-		
+
 		local draw = Random(1, 3)
 		if 3 == draw then
 			Configs.loot[index].weapons = true
@@ -72,8 +62,6 @@ function GenerateLoot()
 			Configs.loot[index].weapons = false			
 		end
 	end
-
-	print("end GenerateLoot")
 
 end
 
