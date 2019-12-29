@@ -2,35 +2,47 @@
 	"author": "samuelds",
 	"version": "1.0",
 	"client_scripts": [
-		"config.lua",
-		"src/utils.common.lua",
+
 		"src/scoreboard/scoreboard.client.lua",
+
+		"config.lua",
+
+		"src/tools/waypoint.client.lua",
+
 		"src/weapons.client.lua",
-		"src/game.client.lua",
+		"src/game/game.client.lua",
 		"src/doors/doors.client.lua",
 		"src/clothing/clothing.client.lua"
+
 	],
 	"server_scripts": [
-		"config.lua",
-		"src/utils.common.lua",
+		
 		"src/scoreboard/scoreboard.server.lua",
-		"src/chat.server.lua",
+		
+		"config.lua",
+
+		"src/player.server.lua",
 		"src/antiafk.server.lua",
 		"src/loot.server.lua",
 		"src/roles.server.lua",
 		"src/clothing/clothing.server.lua",
 		"src/doors/doors.server.lua",
-		"src/player.server.lua",
-		"src/game.server.lua",
-		"src/package.server.lua"
+		"src/game/game.server.lua",
+
+		"src/debug.server.lua",
+
+		"src/server/chat.server.lua",
+		"src/server/package.server.lua"
+
 	],
 	"files": [
+
 		"gui/scoreboard.html",
 		"gui/scoreboard.css",
 		"gui/scoreboard.js",
 		"gui/jquery.js",
 		"gui/xbbcode.js",
 		"gui/xbbcode.css"
-	]
 
+	]
 }

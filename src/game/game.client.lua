@@ -5,7 +5,7 @@
 -- @Source: https://github.com/Onset-minigames
 --
 
-waypoints = {}
+
 
 --
 --
@@ -22,19 +22,6 @@ function GetNearestArmory()
     return false
 
 end
-
---
---
---
-AddRemoteEvent("SetRole", function(role)
-
-    if role == "guardian" then
-        for name, value in pairs(Configs.guardians.waypoints) do
-            table.insert(waypoints, CreateWaypoint(value.x, value.y, value.z, value.text))
-        end
-    end
-
-end)
 
 --
 --
@@ -111,7 +98,7 @@ AddEvent("OnKeyRelease", function(key)
 
         -- Look player
         if GetNearestPlayer() and searchIsLocked == false then
-            CallRemoteEvent("searchPlayerWeaponInRange")
+            CallRemoteEvent("SearchPlayerWeaponInRange")
             Delay(2500, function()
                 searchIsLocked = false
             end)
@@ -123,7 +110,7 @@ AddEvent("OnKeyRelease", function(key)
         local nearestTower = GetNearestTower()
         if nearestTower and controlIsLocked == false then
             controlIsLocked = true
-            CallRemoteEvent("tpTower", nearestTower)
+            CallRemoteEvent("TpTower", nearestTower)
             controlIsLocked = false
         end
 
@@ -131,7 +118,7 @@ AddEvent("OnKeyRelease", function(key)
         local nearestArmory = GetNearestArmory()
         if nearestArmory and controlIsLocked == false then
             controlIsLocked = true
-            CallRemoteEvent("giveWeapons")
+            CallRemoteEvent("GiveWeapons")
             controlIsLocked = false
         end
 
@@ -139,7 +126,7 @@ AddEvent("OnKeyRelease", function(key)
         local nearestJailLoot = GetNearestJailLoot()
 		if nearestJailLoot and controlIsLocked == false then
     		controlIsLocked = true
-            CallRemoteEvent("getJailLoot", nearestJailLoot)
+            CallRemoteEvent("GetJailLoot", nearestJailLoot)
             Delay(2500, function()
             	controlIsLocked = false
             end)
@@ -149,7 +136,7 @@ AddEvent("OnKeyRelease", function(key)
         local nearestLoot = GetNearestLoot()
         if nearestLoot and controlIsLocked == false then
             controlIsLocked = true
-            CallRemoteEvent("getLoot", nearestLoot)
+            CallRemoteEvent("GetLoot", nearestLoot)
             Delay(2500, function()
                 controlIsLocked = false
             end)
@@ -159,7 +146,7 @@ AddEvent("OnKeyRelease", function(key)
         local nearestControle = GetNearestControle()
 		if nearestControle and controlIsLocked == false then
     		controlIsLocked = true
-            CallRemoteEvent("controlInteract", nearestControle)
+            CallRemoteEvent("ControlInteract", nearestControle)
             Delay(2500, function()
             	controlIsLocked = false
             end)
@@ -185,8 +172,6 @@ end)
 --
 AddEvent("OnPlayerDeath", function()
 
-    for _, index in pairs(waypoints) do
-        DestroyWaypoint(index)
-    end
+    RemoveAllWaypoint()
 
 end)

@@ -113,8 +113,7 @@ end
 --
 --
 --
-blockAStatus = false
-AddRemoteEvent("controlInteract", function(playerId, groupName)
+AddRemoteEvent("ControlInteract", function(playerId, groupName)
 
 	local dimension = GetPlayerDimension(playerId)
 	if dimension == 1 then

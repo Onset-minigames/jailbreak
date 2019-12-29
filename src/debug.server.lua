@@ -5,154 +5,41 @@
 -- @Source: https://github.com/Onset-minigames
 --
 
-minPlayer = 3
-gameStatus = 0
 
-
---
---
---
-AddRemoteEvent("tpTower", function(playerId, index)
-
-	if Configs.towers[index] and Configs.towers[index].tpTo then
-		local x, y, z = GetPlayerLocation(playerId)
-		SetPlayerLocation(playerId, x, y, Configs.towers[index].tpTo)
-	end
-
-end)
-
---
---
---
-AddRemoteEvent("giveWeapons", function(playerId, index)
-
-	local dimension = GetPlayerDimension(playerId)
-	if dimension == 1 then
-		SetPlayerWeapon(playerId, 8, 200, true, 2, false)
-		SetPlayerWeapon(playerId, 21, 20, false, 3, false)
-	end
-
-end)
-
---
--- Onpen all jails doors after 5 minutes
---
-gameTimer = {}
-function StartGameTimer()
-
-	print("start StartGameTimer")
-	local count = 1
-	gameTimer = CreateCountTimer(function()
-
-		if 1 == count then
-			SetDoorsGroup("blockA", true)
-			SetDoorsGroup("blockB", true)
-			SetDoorsGroup("blockC", true)
-			SetDoorsGroup("blockD", true)
-		elseif 2 == count then
-			AddPlayerChatAll("Il reste plus que 5 minutes avant la fin de la game !")
-		elseif 3 == count then
-			gameStatus = 4
-		end
-		count = count + 1
-		
-	end, 5 * 60000, 3) -- 5 minutes
-
-end
-
---
---
---
-function StoptGameTimer()
-
-	DestroyTimer(gameTimer)
-
-end
-
---
---
---
-function StartGame()
-
-	SetRole()
-	GenerateLoot()
-	GenerateJailLoot()
-	StartPlayersLocation()
-	StartGameTimer()
-	AddPlayerChatAll('<span color="#eeeeeeaa">Que le jeu commence !</>')
-	gameStatus = 2
-	blockAStatus = false
-
-end
-
---
---
---
-function RunTimer()
-	
-	CreateTimer(function()
-
-		if GetPlayerReadyCount() >= minPlayer and gameStatus == 0 then
-			gameStatus = 1
-			StartGame()
-		elseif (GetPrisonerCount() == 0 or GetGuardianCount() == 0) and 2 == gameStatus or 4 == gameStatus then
-			gameStatus = 3
-			AddPlayerChatAll('<span color="#eeeeeeaa">Fin du jeu, GG à tous !</>')
-			EndGame()
-			Delay(10000, function() -- Pause de 10s
-				gameStatus = 0
-			end)
-		end
-
-	end, 1000)
-
-end
-
---
---
---
-function EndGame()
-
-	StoptGameTimer()
-	ResetGameDoors()
-
-	for _, playerId in pairs(GetAllPlayers()) do
-
-		if Players[playerId] then
-			-- Remove role
-			Players[playerId].role = nil
-			if Players[playerId].chief then
-				Players[playerId].chief = nil
-				ChangeClothing(playerId, "clothing0", nil)
-			end
-
-			-- Remove All weapons
-			SetPlayerWeapon(playerId, 1, 0, true, 1)
-			EquipPlayerWeaponSlot(playerId, 1)
-			SetPlayerWeapon(playerId, 1, 0, false, 2)
-			SetPlayerWeapon(playerId, 1, 0, false, 3)
-			SetPlayerDimension(playerId, 0)			
-			SetPlayerVoiceDimension(playerId, 0)
-			SetPlayerVoiceEnabled(playerId, true)
-
-			Delay(1000, function()  -- 1s
-				SetPlayerHealth(playerId, 0)
-				SetPlayerRespawnTime(playerId, 1000)
-			end)
-		end
-
-	end
-
-end
-
---
---
---
 if Configs.debug == true then
+
+	AddCommand("way", function (playerId)
+
+		print("oui !!");
+		-- Waypoint armory
+		CallRemoteEvent(playerId, "AddWaypoint", "armory", Configs.guardians.waypoints.armory)
+
+		-- Other points
+		CallRemoteEvent(playerId, "AddWaypoint", "outdoorBlockA", Configs.guardians.waypoints.outdoorBlockA)
+		CallRemoteEvent(playerId, "AddWaypoint", "outdoorBlockC", Configs.guardians.waypoints.outdoorBlockC)
+		CallRemoteEvent(playerId, "AddWaypoint", "cafeteria", Configs.guardians.waypoints.cafeteria)
+		CallRemoteEvent(playerId, "AddWaypoint", "shower", Configs.guardians.waypoints.shower)
+
+		-- Waypoints Block A
+		CallRemoteEvent(playerId, "AddWaypoint", "blockA", Configs.guardians.waypoints.blockA)
+		CallRemoteEvent(playerId, "AddWaypoint", "buttonBlockA", Configs.guardians.waypoints.buttonBlockA)
+
+		-- Waypoints Block B
+			CallRemoteEvent(playerId, "AddWaypoint", "blockB", Configs.guardians.waypoints.blockB)
+			CallRemoteEvent(playerId, "AddWaypoint", "buttonBlockB", Configs.guardians.waypoints.buttonBlockB)
+
+
+		-- Waypoints Block C
+			CallRemoteEvent(playerId, "AddWaypoint", "blockC", Configs.guardians.waypoints.blockC)
+			CallRemoteEvent(playerId, "AddWaypoint", "buttonBlockC", Configs.guardians.waypoints.buttonBlockC)
+
+
+	end)
+	
 
 	--
 	AddCommand("tp", function(playerid, x, y, z)
-		
+
 		-- Remove `,`
 		x = string.gsub(x, ",", "")
 		y = string.gsub(y, ",", "")
@@ -160,7 +47,7 @@ if Configs.debug == true then
 
 		AddPlayerChat(playerid, "Tp")
 		SetPlayerLocation(playerid, x, y, z + 100)
-		
+
 	end)
 
 	--
@@ -184,9 +71,8 @@ if Configs.debug == true then
 			print("{ spawn = { x = " .. first.x .. ", y = " .. first.y .. ", z = " .. first.z .." }, loot  = { x = " .. second.x .. ", y = " .. second.y .. ", z = " .. second.z .." }, },")
 			i = 1
 		end
-		
-	end)
 
+	end)
 
 	-- TP
 	AddCommand("jail", function(playerid)
@@ -226,8 +112,6 @@ if Configs.debug == true then
 	end)
 
 	--
-	--
-	--
 	AddCommand("min", function(playerid, number)
 
 		AddPlayerChatAll("Set min player to " .. number)
@@ -235,8 +119,6 @@ if Configs.debug == true then
 
 	end)
 
-	--
-	--
 	--
 	AddCommand("kick", function(playerId, playerToKick, ...)
 
@@ -254,21 +136,15 @@ if Configs.debug == true then
 	end)
 
 	--
-	--
-	--
 	AddCommand("delete", function()
 		DeleteGameDoors()
 	end)
 
 	--
-	--
-	--
 	AddCommand("door", function()
 		CreateGameDoors()
 	end)
 
-	--
-	--
 	--
 	AddCommand("spec", function(player, disable)
 		local _disable = false
@@ -279,8 +155,6 @@ if Configs.debug == true then
 		SetPlayerSpectate(player, _disable)
 	end)
 
-	--
-	--
 	--
 	AddCommand("dim", function(playerId, dim)
 		SetPlayerDimension(playerId, tonumber(dim))
@@ -434,10 +308,9 @@ if Configs.debug == true then
 		"SLAP01",
 		"SLAP01_REACT ",
 	}
-	
+
 	AddCommand("a", function(playerId, anim)
 		SetPlayerAnimation(playerId, Anims[tonumber(anim)])
 	end)
-
 
 end

@@ -5,6 +5,8 @@
 -- @Source: https://github.com/Onset-minigames
 --
 
+
+
 --
 --
 --
@@ -49,29 +51,6 @@ function GenerateJailLoot()
 
 end
 
-
---
---
---
-AddRemoteEvent("getJailLoot", function(playerId, index)
-
-	local dimension = GetPlayerDimension(playerId)
-	if dimension == 1 then
-		if Configs.jails[index].loot and Configs.jails[index].loot.weapons and Configs.jails[index].loot.weapons == true then
-			SetPlayerAnimation(playerId, "PICKUP_LOWER")
-			Configs.jails[index].loot.weapons = false
-
-			if Players[playerId].role == "prisoner" then
-				SetPlayerWeapon(playerId, 3, Random(5, 20), false, 3, false)
-			end
-		else
-			SetPlayerAnimation(playerId, "DONTKNOW")
-		end
-	end
-
-end)
-
-
 --
 --
 --
@@ -96,13 +75,34 @@ end
 --
 --
 --
-AddRemoteEvent("getLoot", function(playerId, index)
+AddRemoteEvent("GetLoot", function(playerId, index)
 	
 	local dimension = GetPlayerDimension(playerId)
 	if dimension == 1 then
 		if Configs.loot[index] and Configs.loot[index].weapons and Configs.loot[index].weapons == true then
 			SetPlayerAnimation(playerId, "PICKUP_MIDDLE")
 			Configs.loot[index].weapons = false
+
+			if Players[playerId].role == "prisoner" then
+				SetPlayerWeapon(playerId, 3, Random(5, 20), false, 3, false)
+			end
+		else
+			SetPlayerAnimation(playerId, "DONTKNOW")
+		end
+	end
+
+end)
+
+--
+--
+--
+AddRemoteEvent("GetJailLoot", function(playerId, index)
+
+	local dimension = GetPlayerDimension(playerId)
+	if dimension == 1 then
+		if Configs.jails[index].loot and Configs.jails[index].loot.weapons and Configs.jails[index].loot.weapons == true then
+			SetPlayerAnimation(playerId, "PICKUP_LOWER")
+			Configs.jails[index].loot.weapons = false
 
 			if Players[playerId].role == "prisoner" then
 				SetPlayerWeapon(playerId, 3, Random(5, 20), false, 3, false)
